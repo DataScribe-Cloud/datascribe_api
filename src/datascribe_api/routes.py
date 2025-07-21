@@ -13,11 +13,11 @@ from datascribe_api.models import (
 )
 
 ROUTES = {
-    "get_data_tables": ("/data-tables", DataTable, []),  # DONE
-    "get_data_table": ("/data-table", DataTable, ["tableName"]),  # FIXME
+    "get_data_tables": ("/data-tables", DataTable, []),
+    "get_data_table": ("/data-table", DataTable, ["tableName"]),
     "get_data_tables_for_user": ("/data-tables-for-user", UserDataTable, []),
     "get_data_table_rows": ("/data-table-rows", DataTableRow, ["tableName", "columns"]),
     "get_data_table_columns": ("/data-table-columns", DataTableColumns, ["tableName"]),
-    "get_data_table_metadata": ("/data-table-metadata", DataTableMetadata, ["tableName"]),  # DONE
-    "get_data_table_rows_count": ("/data-table-rows-count", DataTableRowsCount, ["tableName"]),  # DONE
+    "get_data_table_metadata": ("/data-table-metadata", DataTableMetadata, ["tableName"]),
+    "get_data_table_rows_count": ("/data-table-rows-count", DataTableRowsCount, ["tableName"]),
 }
