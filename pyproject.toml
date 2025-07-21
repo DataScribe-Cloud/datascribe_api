@@ -1,0 +1,57 @@
+[project]
+name = "datascribe-api"
+version = "0.1.0"
+description = "A Python client for the Datascribe API"
+readme = "README.md"
+authors = [
+    { name = "Doguhan Sariturk", email = "dogu.sariturk@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "backoff>=2.2.1",
+    "click>=8.2.1",
+    "dotenv>=0.9.9",
+    "pydantic>=2.11.7",
+    "requests>=2.32.4",
+    "rich>=14.0.0",
+    "typer>=0.16.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pip>=25.1.1",
+    "pre-commit>=4.2.0",
+    "ruff>=0.12.4",
+]
+
+[project.scripts]
+datascribe_cli = "datascribe_cli.cli:cli"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # Errors
+    "ERA", # Eradicate
+    "F",   # Pyflakes
+    "I",   # Import-related issues
+    "N",   # Naming conventions
+    "Q",   # Quality issues
+    "T",   # Type hints
+    "C",   # Complexity issues
+    "D",   # Docstrings
+    "PL",  # Pylint
+]
+ignore = [
+    "E501", # Line too long
+    "F401", # Module imported but unused
+]
+pydocstyle.convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
