@@ -57,6 +57,7 @@ ignore = [
     "E501",   # Line too long
     "F401",   # Module imported but unused
     'ERA001', # Eradicate: Commented-out code
+    'D105',   # Missing docstring in magic method
 ]
 pydocstyle.convention = "google"
 

@@ -7,7 +7,7 @@ These models represent the structure of data returned by the API endpoints.
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, RootModel
 
 
 class DatabaseSchemaColumn(BaseModel):
@@ -98,6 +98,18 @@ class DataTableRow(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
+class DataTableRows(RootModel):
+    """Represents the rows of a data table."""
+
+    root: list[DataTableRow]
+
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]
+
+
 class DataTableMetadata(BaseModel):
     """Represents metadata for a data table.
 
@@ -144,3 +156,15 @@ class DataTable(BaseModel):
     last_updated: datetime
     table_type: str
     visibility: str
+
+
+class DataTables(RootModel):
+    """Represents the rows of a data table."""
+
+    root: list[DataTable]
+
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]

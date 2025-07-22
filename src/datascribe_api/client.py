@@ -97,12 +97,7 @@ class DataScribeClient:
         if resp.get("success") is False:
             raise ValueError(f"API request failed: {resp.get('message', 'Unknown error')}")
         resp = resp.get("data", resp)
-        if isinstance(resp, list):
-            docs = [model(**d) for d in resp]
-        elif isinstance(resp, dict):
-            docs = [model(**resp)]
-        else:
-            docs = model(**resp)
+        docs = model(resp) if isinstance(resp, list) else model(**resp)
         return docs
 
     def close(self) -> None:
