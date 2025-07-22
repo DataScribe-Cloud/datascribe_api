@@ -9,13 +9,12 @@ from datascribe_api.models import (
     DataTableMetadata,
     DataTableRow,
     DataTableRowsCount,
-    UserDataTable,
 )
 
 ROUTES = {
     "get_data_tables": ("/data-tables", DataTable, []),
-    "get_data_table": ("/data-table", DataTable, ["tableName"]),
-    "get_data_tables_for_user": ("/data-tables-for-user", UserDataTable, []),
+    "get_data_table": ("/data-table", DataTableRow, ["tableName"]),
+    "get_data_tables_for_user": ("/data-tables-for-user", DataTable, []),
     "get_data_table_rows": ("/data-table-rows", DataTableRow, ["tableName", "columns"]),
     "get_data_table_columns": ("/data-table-columns", DataTableColumns, ["tableName"]),
     "get_data_table_metadata": ("/data-table-metadata", DataTableMetadata, ["tableName"]),

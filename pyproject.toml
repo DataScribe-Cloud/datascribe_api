@@ -9,8 +9,6 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "backoff>=2.2.1",
-    "click>=8.2.1",
-    "dotenv>=0.9.9",
     "pydantic>=2.11.7",
     "requests>=2.32.4",
     "rich>=14.0.0",
@@ -29,27 +27,36 @@ dev = [
 ]
 
 [project.scripts]
-datascribe_cli = "datascribe_cli.cli:cli"
+datascribe_cli = "datascribe_cli.cli:app"
 
 [tool.ruff]
 line-length = 120
 
 [tool.ruff.lint]
 select = [
-    "E",   # Errors
     "ERA", # Eradicate
+    "B",   # flake8-bugbear
+    "A",   # flake8-builtins
+    "C4",  # flake8-comprehensions
+    "FA",  # flake8-future-annotations
+    "ICN", # flake8-import-conventions
+    "Q",   # flake8-quotes
+    "SIM", # flake8-simplify
+    "TC",  # flake8-type-checking
+    "PTH", # flake8-use-pathlib
+    "I",   # isort
+    "N",   # pep8-naming
+    "E",   # pycodestyle Errors
+    "W",   # pycodestyle Warnings
+    "D",   # pydocstyle
     "F",   # Pyflakes
-    "I",   # Import-related issues
-    "N",   # Naming conventions
-    "Q",   # Quality issues
-    "T",   # Type hints
-    "C",   # Complexity issues
-    "D",   # Docstrings
     "PL",  # Pylint
+    "UP",  # pyupgrade
 ]
 ignore = [
-    "E501", # Line too long
-    "F401", # Module imported but unused
+    "E501",   # Line too long
+    "F401",   # Module imported but unused
+    'ERA001', # Eradicate: Commented-out code
 ]
 pydocstyle.convention = "google"
 

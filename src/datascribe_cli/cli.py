@@ -1,7 +1,7 @@
 """Datascribe CLI - A command-line interface for interacting with the DataScribe API."""
 
 import typer
-from rich import print
+from rich import print as pretty_print
 
 from datascribe_api import DataScribeClient
 
@@ -29,7 +29,7 @@ def data_tables(
     try:
         with DataScribeClient(api_key=api_key) as client:
             for table in client.get_data_tables():
-                print(table)
+                pretty_print(table)
     except Exception as e:
         handle_error(e)
 
@@ -48,7 +48,7 @@ def data_table(
     try:
         with DataScribeClient(api_key=api_key) as client:
             table = client.get_data_table(tableName=table_name)
-            print(table)
+            pretty_print(table)
     except Exception as e:
         handle_error(e)
 
@@ -66,7 +66,7 @@ def data_tables_for_user(
         with DataScribeClient(api_key=api_key) as client:
             for table in client.get_data_tables_for_user():
                 typer.echo("-" * 40)
-                print(table)
+                pretty_print(table)
     except Exception as e:
         handle_error(e)
 
@@ -89,7 +89,7 @@ def data_table_rows(
             cols = columns.split(",")
             rows = client.get_data_table_rows(tableName=table_name, columns=cols)
             for row in rows:
-                typer.echo(row)
+                pretty_print(row)
     except Exception as e:
         handle_error(e)
 
@@ -108,7 +108,7 @@ def data_table_columns(
     try:
         with DataScribeClient(api_key=api_key) as client:
             columns = client.get_data_table_columns(tableName=table_name)
-            print(columns)
+            pretty_print(columns)
     except Exception as e:
         handle_error(e)
 
@@ -129,7 +129,7 @@ def data_table_metadata(
             metadatas = client.get_data_table_metadata(tableName=table_name)
             typer.echo(len(metadatas))
             for data in metadatas:
-                print(data)
+                pretty_print(data)
     except Exception as e:
         handle_error(e)
 
@@ -148,7 +148,7 @@ def data_table_rows_count(
     try:
         with DataScribeClient(api_key=api_key) as client:
             count = client.get_data_table_rows_count(tableName=table_name)
-            print(count)
+            pretty_print(count)
     except Exception as e:
         handle_error(e)
 

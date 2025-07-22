@@ -34,7 +34,7 @@ class DataScribeClient:
         self._api_key = api_key or os.getenv("DATASCRIBE_API_TOKEN")
         if not self._api_key:
             raise ValueError(
-                "A DataScribe API key is required. Check https://datascribe.cloud/profile to generate an API key."
+                "A DataScribe API key is required. Check https://datascribe.cloud/profile to generate an API key.",
             )
         self._base = base.rstrip("/")
         self._session = requests.session()
@@ -42,7 +42,7 @@ class DataScribeClient:
             {
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {self._api_key}",
-            }
+            },
         )
 
     def __enter__(self) -> "DataScribeClient":
@@ -73,7 +73,7 @@ class DataScribeClient:
         except HTTPError as e:
             error_json = e.response.json()
             message = error_json.get("message") or error_json.get("data") or str(e)
-            raise HTTPError(f"HTTP Error {e.response.status_code} - {message}")
+            raise HTTPError(f"HTTP Error {e.response.status_code} - {message}") from e
         return resp.json()
 
     def search(self, endpoint: str, **kwargs) -> Any:

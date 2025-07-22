@@ -44,40 +44,6 @@ class DatabaseSchema(BaseModel):
     columns: list[DatabaseSchemaColumn]
 
 
-class DataTableMetadata(BaseModel):
-    """Represents metadata for a data table.
-
-    Attributes:
-        table_name (str): The name of the table.
-        display_name (str): The display name of the table.
-        user_id (int): The ID of the user associated with the table.
-        created_on (str): The creation timestamp of the table.
-        last_updated (str): The last update timestamp of the table.
-        table_type (str): The type of the table (e.g., temporary, permanent).
-        visibility (str): The visibility of the table (e.g., public, private).
-        database_schema (DatabaseSchema): The schema of the database associated with the table.
-    """
-
-    table_name: str
-    display_name: str
-    user_id: int
-    created_on: datetime
-    last_updated: datetime
-    table_type: str
-    visibility: str
-    database_schema: DatabaseSchema
-
-
-class DataTableRowsCount(BaseModel):
-    """Represents the count of rows in a data table.
-
-    Attributes:
-        total_rows (int): The number of rows in the table.
-    """
-
-    total_rows: int
-
-
 class DataTableColumn(BaseModel):
     """Represents a column in a data table.
 
@@ -102,8 +68,62 @@ class DataTableColumn(BaseModel):
     ordinal_position: int | None = None
 
 
-class UserDataTable(BaseModel):
-    """Represents a user's data table.
+class DataTableColumns(BaseModel):
+    """Represents the columns of a data table.
+
+    Attributes:
+        table_name (str): The name of the table.
+        display_name (str): The display name of the table.
+        columns (list[DataTableColumn]): A list of columns in the table.
+    """
+
+    table_name: str
+    display_name: str
+    columns: list[DataTableColumn]
+
+
+class DataTableRowsCount(BaseModel):
+    """Represents the count of rows in a data table.
+
+    Attributes:
+        total_rows (int): The number of rows in the table.
+    """
+
+    total_rows: int
+
+
+class DataTableRow(BaseModel):
+    """Represents the rows of a data table."""
+
+    model_config = ConfigDict(extra="allow")
+
+
+class DataTableMetadata(BaseModel):
+    """Represents metadata for a data table.
+
+    Attributes:
+        table_name (str): The name of the table.
+        display_name (str): The display name of the table.
+        user_id (int): The ID of the user associated with the table.
+        created_on (str): The creation timestamp of the table.
+        last_updated (str): The last update timestamp of the table.
+        table_type (str): The type of the table (e.g., temporary, permanent).
+        visibility (str): The visibility of the table (e.g., public, private).
+        database_schema (DatabaseSchema): The schema of the database associated with the table.
+    """
+
+    table_name: str
+    display_name: str
+    user_id: int
+    created_on: datetime
+    last_updated: datetime
+    table_type: str
+    visibility: str
+    database_schema: DatabaseSchema
+
+
+class DataTable(BaseModel):
+    """Represents a data table.
 
     Attributes:
         user_id (int): The ID of the user associated with the table.
@@ -123,37 +143,4 @@ class UserDataTable(BaseModel):
     created_on: datetime
     last_updated: datetime
     table_type: str
-    visibility: str | None = None
-
-
-class DataTable(BaseModel):
-    """Represents a data table in the DataScribe API.
-
-    Attributes:
-        _datascribe_user (int): The ID of the user associated with the table.
-        _datascribe_insert_time (datetime): The timestamp when the table was created.
-    """
-
-    model_config = ConfigDict(extra="allow")
-    _datascribe_user = int
-    _datascribe_insert_time = datetime
-
-
-class DataTableColumns(BaseModel):
-    """Represents the columns of a data table.
-
-    Attributes:
-        table_name (str): The name of the table.
-        display_name (str): The display name of the table.
-        columns (list[DataTableColumn]): A list of columns in the table.
-    """
-
-    table_name: str
-    display_name: str
-    columns: list[DataTableColumn]
-
-
-class DataTableRow(BaseModel):
-    """Represents the rows of a data table."""
-
-    model_config = ConfigDict(extra="allow")
+    visibility: str
