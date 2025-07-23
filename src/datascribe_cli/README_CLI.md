@@ -12,17 +12,16 @@ $ datascribe_cli [OPTIONS] COMMAND [ARGS]...
 
 * `--install-completion`: Install completion for the current shell.
 * `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
-* `--help`: Show this message and exit.
 
 **Commands**:
 
-* `data-tables`: This command retrieves and displays all...
-* `data-table`: This command retrieves and displays a...
-* `data-tables-for-user`: This command retrieves and displays all...
-* `data-table-rows`: This command retrieves and displays rows...
-* `data-table-columns`: This command retrieves and displays the...
-* `data-table-metadata`: This command retrieves and displays...
-* `data-table-rows-count`: This command retrieves and displays the...
+* `data-tables`: This command retrieves and displays all data tables available in the DataScribe API.
+* `data-table`: This command retrieves and displays a specific data table from the DataScribe API.
+* `data-tables-for-user`: This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API.
+* `data-table-rows`: This command retrieves and displays rows from a specified data table, allowing you to specify which columns to include.
+* `data-table-columns`: This command retrieves and displays the columns of a specified data table in the DataScribe API.
+* `data-table-metadata`: This command retrieves and displays metadata for a specified data table in the DataScribe API.
+* `data-table-rows-count`: This command retrieves and displays the number of rows in a specified data table in the DataScribe API.
 
 ---
 
@@ -38,7 +37,7 @@ This command retrieves and displays all data tables available in the DataScribe 
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--help`: Show this message and exit.
-*
+
 **Usage**:
 
 ```console
@@ -60,7 +59,7 @@ This command retrieves and displays a specific data table from the DataScribe AP
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--help`: Show this message and exit.
-*
+
 **Usage**:
 
 ```console
@@ -79,7 +78,7 @@ This command retrieves and displays all data tables that the authenticated user 
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--help`: Show this message and exit.
-*
+
 **Usage**:
 
 ```console
@@ -124,7 +123,7 @@ This command retrieves and displays the columns of a specified data table in the
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--help`: Show this message and exit.
-*
+
 **Usage**:
 
 ```console
