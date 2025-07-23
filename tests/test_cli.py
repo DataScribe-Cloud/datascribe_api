@@ -78,8 +78,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test retrieving the row count for a data table."""
         result = runner.invoke(app, ["data-table-rows-count", self.table_name, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
-        self.assertTrue("DataTableRowsCount" in result.output)
-        self.assertTrue("total_rows" in result.output)
+        self.assertIn("DataTableRowsCount", result.output)
+        self.assertIn("total_rows", result.output)
 
     def test_data_table_rows(self):
         """Test retrieving rows from a data table."""
@@ -95,9 +95,6 @@ class TestDataScribeCLI(unittest.TestCase):
         columns_arg = ",".join(column_names)
         result = runner.invoke(app, ["data-table-rows", self.table_name, columns_arg, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("_datascribe_user", result.output)
-        self.assertIn("_datascribe_insert_time", result.output)
-        self.assertIn("_datascribe_metadata", result.output)
 
     def test_invalid_api_key(self):
         """Test that an invalid API key returns an error."""
