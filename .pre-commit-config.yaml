@@ -3,8 +3,7 @@ repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.7.21
     hooks:
-      - id: uv-export
-        args: ["--no-hashes", "--format=requirements-txt", "--no-annotate", "--no-header", "--no-dev", "-o", "requirements.txt"]
+      - id: uv-lock
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.3
@@ -20,7 +19,6 @@ repos:
       - id: end-of-file-fixer
       - id: check-case-conflict
       - id: mixed-line-ending
-      - id: requirements-txt-fixer
       - id: check-yaml
 
   - repo: https://github.com/codespell-project/codespell
