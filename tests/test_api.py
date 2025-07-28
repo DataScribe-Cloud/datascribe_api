@@ -204,7 +204,3 @@ class TestDataScribeClient(unittest.TestCase):
         with DataScribeClient(api_key=API_TOKEN) as client:
             tables = client.get_data_tables_for_user()
             self.assertIsInstance(tables, DataTables)
-
-
-if __name__ == "__main__":
-    unittest.main()
