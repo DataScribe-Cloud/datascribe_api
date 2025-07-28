@@ -80,7 +80,7 @@ class DataScribeClient:
         """Search for data tables or metadata in the DataScribe API.
 
         Args:
-            endpoint (str): The endpoint to search, e.g., "data-table", "data-tables", etc.
+            endpoint (str): The endpoint to search, e.g., "get_data_tables", "get_data_table", etc.
             **kwargs: Additional parameters to pass to the API.
 
         Returns:
