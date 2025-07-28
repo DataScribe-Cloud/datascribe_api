@@ -2,10 +2,11 @@
 
 import typer
 from rich import print as pretty_print
+from rich.panel import Panel
 
 from datascribe_api import DataScribeClient
 
-app = typer.Typer(help="Datascribe CLI - Interact with the DataScribe API.")
+app = typer.Typer(help="Datascribe CLI - Interact with the DataScribe API.", pretty_exceptions_show_locals=False)
 
 
 def handle_error(e: Exception):
@@ -14,7 +15,7 @@ def handle_error(e: Exception):
     Args:
         e (Exception): The exception to handle.
     """
-    typer.secho(f"Error: {e}", err=True, fg=typer.colors.RED)
+    pretty_print(Panel(renderable=f"{e}", title="Error", title_align="left", border_style="red"))
 
 
 @app.command("data-tables")
@@ -103,8 +104,7 @@ def data_table_rows(
     try:
         with DataScribeClient(api_key=api_key) as client:
             cols = columns.split(",")
-            rows = client.get_data_table_rows(tableName=table_name, columns=cols)
-            for row in rows:
+            for row in client.get_data_table_rows(tableName=table_name, columns=cols):
                 if json:
                     typer.echo(row.model_dump_json())
                 else:

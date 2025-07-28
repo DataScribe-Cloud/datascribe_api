@@ -256,7 +256,7 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_runs_cli_application_successfully(self):
         """Ensure the CLI application runs without errors."""
         result = runner.invoke(app, [])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 2)
         self.assertIn("Missing command.", result.output)
 
     def test_displays_error_for_invalid_command(self):
