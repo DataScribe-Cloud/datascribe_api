@@ -91,7 +91,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that requesting a nonexistent table returns an error."""
         result = runner.invoke(app, ["data-table", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
-        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("HTTP Error 404", result.output)
+        self.assertIn("Table not found", result.output)
 
     def test_data_table_outputs_json_representation_when_json_flag_is_true(self):
         """Ensure the command outputs JSON representation when the --json flag is set."""
@@ -157,7 +158,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that requesting columns for a nonexistent table returns an error."""
         result = runner.invoke(app, ["data-table-columns", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
-        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("HTTP Error 404", result.output)
+        self.assertIn("Table not found", result.output)
 
     def test_data_table_columns_outputs_json_representation_when_json_flag_is_true(self):
         """Ensure the command outputs JSON representation when the --json flag is set."""
@@ -191,7 +193,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that requesting metadata for a nonexistent table returns an error."""
         result = runner.invoke(app, ["data-table-metadata", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
-        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("HTTP Error 404", result.output)
+        self.assertIn("Table not found", result.output)
 
     def test_data_table_metadata_outputs_json_representation_when_json_flag_is_true(self):
         """Ensure the command outputs JSON representation when the --json flag is set."""
@@ -217,7 +220,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that requesting row count for a nonexistent table returns an error."""
         result = runner.invoke(app, ["data-table-rows-count", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
-        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("HTTP Error 404", result.output)
+        self.assertIn("Table not found", result.output)
 
     def test_data_table_rows_count_outputs_json_representation_when_json_flag_is_true(self):
         """Ensure the command outputs JSON representation when the --json flag is set."""
@@ -251,7 +255,8 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that requesting rows from a nonexistent table returns an error."""
         result = runner.invoke(app, ["data-table-rows", "__nonexistent_table__", "column1,column2", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
-        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("HTTP Error 404", result.output)
+        self.assertIn("Table not found", result.output)
 
     def test_data_table_rows_outputs_json_representation_when_json_flag_is_true(self):
         """Ensure the command outputs JSON representation when the --json flag is set."""
