@@ -6,6 +6,9 @@
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Platforms](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey)
 
+[![Test API](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_api.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_api.yml)
+[![Test CLI](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_cli.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_cli.yml)
+
 `datascribe_api` is a Python client for interacting with the DataScribe API. It allows users to search for data tables and their metadata, automating data retrieval and analysis workflows.
 
 <p>
@@ -66,5 +69,3 @@ See the [CLI documentation](./src/datascribe_cli/README_CLI.md) for more command
 ## License
 
 This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for details.
-
----
