@@ -372,7 +372,6 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )  # FIXME
         self.assertIn("Error", result.output)
-        print(result.output)
         self.assertIn("HTTP Error 400", result.output)
         self.assertIn("numRows must be a valid positive integer", result.output)
 
