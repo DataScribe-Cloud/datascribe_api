@@ -100,6 +100,44 @@ class TestDataScribeCLI(unittest.TestCase):
         self.assertNotIn("DataTableRows", result.output)
         self.assertNotIn("DataTableRow", result.output)
 
+    def test_data_table_starting_row(self):
+        """Test retrieving a specific data table with starting row."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--starting-row", "0"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRows", result.output)
+
+    def test_data_table_starting_row_invalid(self):
+        """Test that an invalid starting row returns an error."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--starting-row", "-1"])
+        self.assertIn("Error", result.output)
+        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("OFFSET must not be negative", result.output)
+
+    def test_data_table_starting_row_short_name(self):
+        """Test retrieving a specific data table with starting row using short name."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "-s", "0"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRows", result.output)
+
+    def test_data_table_num_rows(self):
+        """Test retrieving a specific data table with a specified number of rows."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--num-rows", "10"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRows", result.output)
+
+    def test_data_table_num_rows_invalid(self):
+        """Test that an invalid number of rows returns an error."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--num-rows", "-1"])
+        self.assertIn("Error", result.output)
+        self.assertIn("HTTP Error 500", result.output)
+        self.assertIn("LIMIT must not be negative", result.output)
+
+    def test_data_table_num_rows_short_name(self):
+        """Test retrieving a specific data table with a specified number of rows using short name."""
+        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "-n", "10"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRows", result.output)
+
     def test_data_table_columns(self):
         """Test retrieving columns for a data table."""
         result = runner.invoke(app, ["data-table-columns", self.table_name, "--api-key", API_TOKEN])
@@ -244,6 +282,111 @@ class TestDataScribeCLI(unittest.TestCase):
         self.assertIn("Error", result.output)
         self.assertIn("Missing required parameter", result.output)
         self.assertIn("columns", result.output)
+
+    def test_data_table_rows_starting_row(self):
+        """Test retrieving rows from a data table with a specified starting row."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--starting-row",
+                "0",
+            ],
+        )  # FIXME
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
+
+    def test_data_table_rows_starting_row_invalid(self):
+        """Test that an invalid starting row returns an error."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--starting-row",
+                "-1",
+            ],
+        )  # FIXME
+        self.assertIn("Error", result.output)
+        self.assertIn("HTTP Error 400", result.output)
+        self.assertIn("startingRow must be a valid non-negative integer", result.output)
+
+    def test_data_table_rows_starting_row_short_name(self):
+        """Test retrieving rows from a data table with a specified starting row using short name."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "-s",
+                "0",
+            ],
+        )  # FIXME
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
+
+    def test_data_table_rows_num_rows(self):
+        """Test retrieving rows from a data table with a specified number of rows."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--num-rows",
+                "10",
+            ],
+        )  # FIXME
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
+
+    def test_data_table_rows_num_rows_invalid(self):
+        """Test that an invalid number of rows returns an error."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--num-rows",
+                "-1",
+            ],
+        )  # FIXME
+        self.assertIn("Error", result.output)
+        print(result.output)
+        self.assertIn("HTTP Error 400", result.output)
+        self.assertIn("numRows must be a valid positive integer", result.output)
+
+    def test_data_table_rows_num_rows_short_name(self):
+        """Test retrieving rows from a data table with a specified number of rows using short name."""
+        result = runner.invoke(  # FIXME
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "-n",
+                "10",
+            ],
+        )  # FIXME
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
 
     def test_help(self):
         """Test that the CLI help command works."""
