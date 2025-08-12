@@ -211,9 +211,7 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table_rows_nonexistent_table(self):
         """Test that requesting rows from a nonexistent table returns an error."""
-        result = runner.invoke(
-            app, ["data-table-rows", "__nonexistent_table__", "column1,column2", "--api-key", API_TOKEN]
-        )
+        result = runner.invoke(app, ["data-table-rows", "__nonexistent_table__", "column1,column2", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 500", result.output)
 
