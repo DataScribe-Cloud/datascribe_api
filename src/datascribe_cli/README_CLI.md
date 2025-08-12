@@ -29,20 +29,16 @@ $ datascribe_cli [OPTIONS] COMMAND [ARGS]...
 
 This command retrieves and displays all data tables available in the DataScribe API.
 
-**Arguments**:
-
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
-
 **Usage**:
 
 ```console
 $ datascribe_cli data-tables [OPTIONS]
 ```
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--json`: Output in JSON format.
 
 ---
 
@@ -50,34 +46,26 @@ $ datascribe_cli data-tables [OPTIONS]
 
 This command retrieves and displays a specific data table from the DataScribe API.
 
-**Arguments**:
-
-* `table_name` (str): The name of the data table to retrieve.
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
-
 **Usage**:
 
 ```console
 $ datascribe_cli data-table [OPTIONS] TABLE_NAME
 ```
 
-## `datascribe_cli data-tables-for-user`
-
-This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API.
-
 **Arguments**:
 
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
+* `TABLE_NAME`: Name of the data table.  [required]
 
 **Options**:
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
+* `-s, --starting-row INTEGER`: Starting row index for pagination.  [default: 0]
+* `-n, --num-rows INTEGER`: Number of rows to retrieve.  [default: 100]
+* `--json`: Output in JSON format.
+
+## `datascribe_cli data-tables-for-user`
+
+This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API.
 
 **Usage**:
 
@@ -85,22 +73,16 @@ This command retrieves and displays all data tables that the authenticated user 
 $ datascribe_cli data-tables-for-user [OPTIONS]
 ```
 
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--json`: Output in JSON format.
+
 ---
 
 ## `datascribe_cli data-table-rows`
 
 This command retrieves and displays rows from a specified data table, allowing you to specify which columns to include.
-
-**Arguments**:
-
-* `table_name` (str): The name of the data table to retrieve rows from.
-* `columns` (str): A comma-separated list of column names to include in the output.
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
 
 **Usage**:
 
@@ -108,21 +90,23 @@ This command retrieves and displays rows from a specified data table, allowing y
 $ datascribe_cli data-table-rows [OPTIONS] TABLE_NAME COLUMNS
 ```
 
+**Arguments**:
+
+* `TABLE_NAME`: Name of the data table.  [required]
+* `COLUMNS`: Comma-separated list of columns.  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `-s, --starting-row INTEGER`: Starting row index for pagination.  [default: 0]
+* `-n, --num-rows INTEGER`: Number of rows to retrieve.  [default: 100]
+* `--json`: Output in JSON format.
+
 ---
 
 ## `datascribe_cli data-table-columns`
 
 This command retrieves and displays the columns of a specified data table in the DataScribe API.
-
-**Arguments**:
-
-* `table_name` (str): The name of the data table to retrieve columns from.
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
 
 **Usage**:
 
@@ -130,21 +114,20 @@ This command retrieves and displays the columns of a specified data table in the
 $ datascribe_cli data-table-columns [OPTIONS] TABLE_NAME
 ```
 
+**Arguments**:
+
+* `TABLE_NAME`: Name of the data table.  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--json`: Output in JSON format.
+
 ---
 
 ## `datascribe_cli data-table-metadata`
 
 This command retrieves and displays metadata for a specified data table in the DataScribe API.
-
-**Arguments**:
-
-* `table_name` (str): The name of the data table to retrieve metadata for.
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable `DATASCRIBE_API_TOKEN`.
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
 
 **Usage**:
 
@@ -152,24 +135,32 @@ This command retrieves and displays metadata for a specified data table in the D
 $ datascribe_cli data-table-metadata [OPTIONS] TABLE_NAME
 ```
 
+**Arguments**:
+
+* `TABLE_NAME`: Name of the data table.  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--json`: Output in JSON format.
+
 ---
 
 ## `datascribe_cli data-table-rows-count`
 
 This command retrieves and displays the number of rows in a specified data table in the DataScribe API.
 
-**Arguments**:
-
-* `table_name` (str): The name of the data table to count rows in.
-* `api_key` (str): Your DataScribe API key, which can also be set using the environment variable
-
-**Options**:
-
-* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
-* `--help`: Show this message and exit.
-
 **Usage**:
 
 ```console
 $ datascribe_cli data-table-rows-count [OPTIONS] TABLE_NAME
 ```
+
+**Arguments**:
+
+* `TABLE_NAME`: Name of the data table.  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--json`: Output in JSON format.
