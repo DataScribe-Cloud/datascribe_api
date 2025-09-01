@@ -25,7 +25,7 @@ def data_tables(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays all data tables available in the DataScribe API."""
+    """Retrieve and display all available data tables."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             for table in client.get_data_tables():
@@ -45,7 +45,7 @@ def data_table(
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays a specific data table from the DataScribe API."""
+    """Retrieve and display a specific data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             table = client.get_data_table(tableName=table_name, startingRow=starting_row, numRows=num_rows)
@@ -62,7 +62,7 @@ def data_tables_for_user(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API."""
+    """Retrieve and display all data tables that the authenticated user has access to."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             for table in client.get_data_tables_for_user():
@@ -83,7 +83,7 @@ def data_table_rows(
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays rows from a specified data table, allowing you to specify which columns to include."""
+    """Retrieve and display rows from a specified data table, allowing you to specify which columns to include."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             cols = columns.split(",")
@@ -102,7 +102,7 @@ def data_table_columns(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays the columns of a specified data table in the DataScribe API."""
+    """Retrieve and display the columns of a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             columns = client.get_data_table_columns(tableName=table_name)
@@ -120,7 +120,7 @@ def data_table_metadata(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays metadata for a specified data table in the DataScribe API."""
+    """Retrieve and display metadata for a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             metadata = client.get_data_table_metadata(tableName=table_name)
@@ -138,7 +138,7 @@ def data_table_rows_count(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ):
-    """This command retrieves and displays the number of rows in a specified data table in the DataScribe API."""
+    """Retrieve and display the number of rows in a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
             count = client.get_data_table_rows_count(tableName=table_name)
