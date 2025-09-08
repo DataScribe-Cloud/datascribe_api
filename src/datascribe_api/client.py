@@ -3,12 +3,14 @@
 This module provides a client for interacting with the DataScribe API, allowing users to search for data tables and their metadata.
 """
 
+import json
 import os
 from typing import Any
 
 import requests
 from requests import HTTPError
 
+from datascribe_api.filter import Filter
 from datascribe_api.routes import ROUTES
 
 
@@ -67,6 +69,13 @@ class DataScribeClient:
             HTTPError: If the request fails with a status code indicating an error.
         """
         url = f"{self._base}{path}"
+        filters = params.get("filters")
+        if filters is not None:
+            try:
+                serialized = Filter.serialize(filters)
+            except Exception as e:
+                raise TypeError(f"Invalid filters: {e}") from e
+            params["filters"] = json.dumps(serialized)
         try:
             resp = self._session.get(url=url, params=params, timeout=30)
             resp.raise_for_status()
@@ -76,12 +85,18 @@ class DataScribeClient:
             raise HTTPError(f"HTTP Error {e.response.status_code} - {message}") from e
         return resp.json()
 
-    def search(self, endpoint: str, **kwargs) -> Any:
+    def search(self, endpoint: str, **kwargs: Any) -> Any:
         """Search for data tables or metadata in the DataScribe API.
 
         Args:
             endpoint (str): The endpoint to search, e.g., "get_data_tables", "get_data_table", etc.
-            **kwargs: Additional parameters to pass to the API.
+            **kwargs: Additional parameters to pass to the API. For endpoints supporting filtering, pass 'filters' as a dict, Filter, or list of Filters.
+
+        Example:
+                    filters = Filter("age") > 30
+                    filters = [Filter("age") > 30, Filter("name") == "Alice"]
+                    filters = {"column": "age", "operator": ">", "value": 30}
+                    client.get_data_table_rows(tableName="users", columns=["id", "name", "age"], filters=filters)
 
         Returns:
             Any: A list of data models corresponding to the search results.

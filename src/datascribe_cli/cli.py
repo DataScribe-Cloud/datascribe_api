@@ -11,7 +11,7 @@ from datascribe_api import DataScribeClient
 app = typer.Typer(help="Datascribe CLI - Interact with the DataScribe API.", pretty_exceptions_show_locals=False)
 
 
-def handle_error(e: Exception):
+def handle_error(e: Exception) -> None:
     """Handle errors by printing them to the console.
 
     Args:
@@ -24,7 +24,7 @@ def handle_error(e: Exception):
 def data_tables(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display all available data tables."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -44,7 +44,7 @@ def data_table(
     starting_row: Annotated[int, typer.Option("--starting-row", "-s", help="Starting row index for pagination.")] = 0,
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display a specific data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -61,7 +61,7 @@ def data_table(
 def data_tables_for_user(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display all data tables that the authenticated user has access to."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -82,7 +82,7 @@ def data_table_rows(
     starting_row: Annotated[int, typer.Option("--starting-row", "-s", help="Starting row index for pagination.")] = 0,
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display rows from a specified data table, allowing you to specify which columns to include."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -101,7 +101,7 @@ def data_table_columns(
     table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display the columns of a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -119,7 +119,7 @@ def data_table_metadata(
     table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display metadata for a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -137,7 +137,7 @@ def data_table_rows_count(
     table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
-):
+) -> None:
     """Retrieve and display the number of rows in a specified data table."""
     try:
         with DataScribeClient(api_key=api_key) as client:
@@ -151,7 +151,7 @@ def data_table_rows_count(
 
 
 @app.callback(invoke_without_command=True)
-def default(ctx: typer.Context):
+def default(ctx: typer.Context) -> None:
     """Default command that displays the help message."""
     typer.echo(ctx.get_help())
 

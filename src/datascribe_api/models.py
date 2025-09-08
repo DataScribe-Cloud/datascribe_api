@@ -4,6 +4,7 @@ This module defines the Pydantic models used for interacting with the DataScribe
 These models represent the structure of data returned by the API endpoints.
 """
 
+from collections.abc import Iterator
 from datetime import datetime
 from typing import Any
 
@@ -81,6 +82,10 @@ class DataTableColumns(BaseModel):
     display_name: str
     columns: list[DataTableColumn]
 
+    def __len__(self) -> int:
+        """Return the number of columns."""
+        return len(self.columns)
+
 
 class DataTableRowsCount(BaseModel):
     """Represents the count of rows in a data table.
@@ -103,11 +108,15 @@ class DataTableRows(RootModel):
 
     root: list[DataTableRow]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[DataTableRow]:
         return iter(self.root)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> DataTableRow:
         return self.root[item]
+
+    def __len__(self) -> int:
+        """Return the number of rows."""
+        return len(self.root)
 
 
 class DataTableMetadata(BaseModel):
@@ -163,8 +172,12 @@ class DataTables(RootModel):
 
     root: list[DataTable]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[DataTable]:
         return iter(self.root)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> DataTable:
         return self.root[item]
+
+    def __len__(self) -> int:
+        """Return the number of tables."""
+        return len(self.root)
