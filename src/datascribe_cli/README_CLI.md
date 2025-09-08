@@ -100,6 +100,7 @@ $ datascribe_cli data-table-rows [OPTIONS] TABLE_NAME COLUMNS
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `-s, --starting-row INTEGER`: Starting row index for pagination.  [default: 0]
 * `-n, --num-rows INTEGER`: Number of rows to retrieve.  [default: 100]
+* `--filter TEXT`: Filter expression. Can be used multiple times.
 * `--json`: Output in JSON format.
 
 ---
@@ -163,4 +164,5 @@ $ datascribe_cli data-table-rows-count [OPTIONS] TABLE_NAME
 **Options**:
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--filter TEXT`: Filter expression. Can be used multiple times.
 * `--json`: Output in JSON format.

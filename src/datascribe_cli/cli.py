@@ -188,9 +188,7 @@ def data_table_metadata(
 def data_table_rows_count(
     table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
-    filter_: Annotated[
-        list[str], typer.Option("--filter", help="Filter expression, e.g. 'age>30'. Can be used multiple times.")
-    ] = [],
+    filter_: Annotated[list[str], typer.Option("--filter", help="Filter expression. Can be used multiple times.")] = [],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Retrieve and display the number of rows in a specified data table. Filtering is supported using --filter."""
