@@ -57,8 +57,11 @@ ignore = [
     "PLR0913", # Too many arguments in function definition
     "E501",    # Line too long
     "F401",    # Module imported but unused
-    'ERA001',  # Eradicate: Commented-out code
-    'D105',    # Missing docstring in magic method
+    "ERA001",  # Eradicate: Commented-out code
+    "D105",    # Missing docstring in magic method
+    "PLR0911", # Too many return statements
+    "PLR0912", # Too many branches
+    "B006",    # Do not use mutable data structures for argument defaults
 ]
 pydocstyle.convention = "google"
 

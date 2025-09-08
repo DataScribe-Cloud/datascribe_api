@@ -418,3 +418,104 @@ class TestDataScribeCLI(unittest.TestCase):
         result = runner.invoke(app, ["invalid-command"])
         self.assertNotEqual(result.exit_code, 0)
         self.assertIn("No such command", result.output)
+
+    def test_data_table_rows_with_basic_filter(self) -> None:
+        """Test data-table-rows with a basic filter (col=value)."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                "Node_ID is not null",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
+
+    def test_data_table_rows_with_multiple_filters(self) -> None:
+        """Test data-table-rows with multiple filters (AND logic)."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                "Node_ID is not null",
+                "--filter",
+                "NodeCoord_0 is not null",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRow", result.stdout)
+
+    def test_data_table_rows_with_in_filter(self) -> None:
+        """Test data-table-rows with an IN filter."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                "Node_ID in foo,bar,baz",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+
+    def test_data_table_rows_with_like_filter(self) -> None:
+        """Test data-table-rows with a LIKE filter."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                "nimplex_composition_space",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                "Node_ID like %a%",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+
+    def test_data_table_rows_with_invalid_filter(self) -> None:
+        """Test data-table-rows with an invalid filter syntax (should error)."""
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows",
+                self.table_name,
+                self.columns_arg,
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                "invalidfilter",
+            ],
+        )
+        self.assertIn("Invalid filter syntax", result.stdout)
+
+    def test_data_table_rows_count_with_filter(self) -> None:
+        """Test data-table-rows-count with a filter."""
+        col1 = self.columns_arg.split(",")[0]
+        result = runner.invoke(
+            app,
+            [
+                "data-table-rows-count",
+                self.table_name,
+                "--api-key",
+                API_TOKEN,
+                "--filter",
+                f"{col1} is not null",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("DataTableRowsCount", result.stdout)

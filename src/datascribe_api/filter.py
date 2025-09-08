@@ -2,7 +2,7 @@
 
 This module provides the Filter class, which enables Pythonic and expressive construction of filter objects
 for use with the DataScribe API. It supports operator overloading and named methods for all common SQL-like
-filter operations, including equality, comparison, IN, LIKE, IS NULL, BETWEEN, and more.
+filter operations, including equality, comparison, IN, LIKE, IS NULL, and more.
 """
 
 from typing import Any, Union
@@ -19,7 +19,6 @@ class Filter:
         Filter("status").in_(["active", "pending"])
         Filter("name").like("%John%")
         Filter("deleted_at").is_null()
-        Filter("age").between(18, 30)
     """
 
     __hash__ = None
@@ -116,28 +115,6 @@ class Filter:
         """
         return self._build("ilike", value)
 
-    def not_like(self, value: str) -> "Filter":
-        """NOT LIKE operator.
-
-        Args:
-            value (str): The pattern for NOT LIKE.
-
-        Returns:
-            Filter: The filter instance.
-        """
-        return self._build("not like", value)
-
-    def not_ilike(self, value: str) -> "Filter":
-        """NOT ILIKE operator.
-
-        Args:
-            value (str): The pattern for NOT ILIKE.
-
-        Returns:
-            Filter: The filter instance.
-        """
-        return self._build("not ilike", value)
-
     def is_null(self) -> "Filter":
         """IS NULL operator.
 
@@ -153,30 +130,6 @@ class Filter:
             Filter: The filter instance.
         """
         return self._build("is not null", None)
-
-    def between(self, a: Any, b: Any) -> "Filter":
-        """BETWEEN operator.
-
-        Args:
-            a (Any): Start value.
-            b (Any): End value.
-
-        Returns:
-            Filter: The filter instance.
-        """
-        return self._build("between", [a, b])
-
-    def not_between(self, a: Any, b: Any) -> "Filter":
-        """NOT BETWEEN operator.
-
-        Args:
-            a (Any): Start value.
-            b (Any): End value.
-
-        Returns:
-            Filter: The filter instance.
-        """
-        return self._build("not between", [a, b])
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the filter to a dictionary suitable for the API.

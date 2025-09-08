@@ -286,17 +286,6 @@ class TestDataScribeClient(unittest.TestCase):
             pass
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
-    def test_filtering_with_between_operator(self) -> None:
-        """Test filtering rows using the 'between' operator."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).between(0, 100)
-        try:
-            rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
-            self.assertIsInstance(rows, DataTableRows)
-        except HTTPError:
-            pass
-
-    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_invalid_type_raises(self) -> None:
         """Test that passing an invalid filter type raises TypeError."""
         table_name, column_name = self._get_valid_table_and_column()

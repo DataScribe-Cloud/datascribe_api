@@ -73,16 +73,6 @@ class TestFilter(unittest.TestCase):
         f = Filter("name").ilike("%john%")
         self.assertEqual(f.to_dict(), {"column": "name", "operator": "ilike", "value": "%john%"})
 
-    def test_not_like_operator(self) -> None:
-        """Test NOT LIKE operator."""
-        f = Filter("name").not_like("%Doe%")
-        self.assertEqual(f.to_dict(), {"column": "name", "operator": "not like", "value": "%Doe%"})
-
-    def test_not_ilike_operator(self) -> None:
-        """Test NOT ILIKE operator."""
-        f = Filter("name").not_ilike("%doe%")
-        self.assertEqual(f.to_dict(), {"column": "name", "operator": "not ilike", "value": "%doe%"})
-
     def test_is_null_operator(self) -> None:
         """Test IS NULL operator."""
         f = Filter("deleted_at").is_null()
@@ -92,16 +82,6 @@ class TestFilter(unittest.TestCase):
         """Test IS NOT NULL operator."""
         f = Filter("deleted_at").is_not_null()
         self.assertEqual(f.to_dict(), {"column": "deleted_at", "operator": "is not null", "value": None})
-
-    def test_between_operator(self) -> None:
-        """Test BETWEEN operator."""
-        f = Filter("age").between(AGE_18, AGE_30)
-        self.assertEqual(f.to_dict(), {"column": "age", "operator": "between", "value": [AGE_18, AGE_30]})
-
-    def test_not_between_operator(self) -> None:
-        """Test NOT BETWEEN operator."""
-        f = Filter("age").not_between(AGE_40, AGE_50)
-        self.assertEqual(f.to_dict(), {"column": "age", "operator": "not between", "value": [AGE_40, AGE_50]})
 
     def test_serialize_dict(self) -> None:
         """Test serialization of a dict filter."""

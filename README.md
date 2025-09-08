@@ -93,20 +93,12 @@ with DataScribeClient(api_key="YOUR_API_TOKEN") as client:
   ```python
   Filter("name").like("%John%")
   Filter("email").ilike("%@gmail.com")
-  Filter("name").not_like("%Doe%")
-  Filter("email").not_ilike("%@spam.com")
   ```
 
 - **IS NULL and IS NOT NULL**
   ```python
   Filter("deleted_at").is_null()
   Filter("deleted_at").is_not_null()
-  ```
-
-- **BETWEEN and NOT BETWEEN**
-  ```python
-  Filter("age").between(18, 30)
-  Filter("score").not_between(0, 50)
   ```
 
 #### Combining Multiple Filters (AND logic)
