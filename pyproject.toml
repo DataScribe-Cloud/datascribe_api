@@ -1,11 +1,13 @@
 [project]
-name = "datascribe-api"
-version = "0.1.0"
+name = "datascribe_api"
+version = "1.0.0"
 description = "A Python client for the Datascribe API"
 readme = "README.md"
 authors = [
     { name = "Doguhan Sariturk", email = "dogu.sariturk@gmail.com" }
 ]
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = [
     "backoff>=2.2.1",

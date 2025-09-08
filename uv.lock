@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.11"
 
 [[package]]
@@ -108,8 +108,8 @@ wheels = [
 ]
 
 [[package]]
-name = "datascribe-api"
-version = "0.1.0"
+name = "datascribe_api"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
