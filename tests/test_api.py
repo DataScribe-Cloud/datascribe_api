@@ -27,6 +27,7 @@ from datascribe_api.routes import ROUTES
 from datascribe_api.utils import retry_session
 
 API_TOKEN: str | None = os.environ.get("DATASCRIBE_API_TOKEN")
+ADMIN_API_TOKEN: str | None = os.environ.get("DATASCRIBE_ADMIN_API_TOKEN")
 
 
 class TestDataScribeClient(unittest.TestCase):
@@ -50,14 +51,9 @@ class TestDataScribeClient(unittest.TestCase):
             unittest.SkipTest: If no valid table/column is found.
         """
         tables = self.client.get_data_tables_for_user()
-        for table in tables:
-            table_name = getattr(table, "table_name", None)
-            if not table_name:
-                continue
-            columns = self.client.get_data_table_columns(tableName=table_name)
-            if columns.columns:
-                return table_name, columns.columns[0].column_name
-        raise unittest.SkipTest("No valid table/column found for filtering tests.")
+        table_name = getattr(tables[0], "table_name", None)
+        columns = self.client.get_data_table_columns(tableName=table_name)
+        return table_name, columns.columns[0].column_name
 
     def test_retry_session_returns_session_instance(self) -> None:
         """Ensure retry_session returns a valid Session instance."""
@@ -93,20 +89,21 @@ class TestDataScribeClient(unittest.TestCase):
         """Ensure __dir__ returns a combined list of ROUTES keys and superclass attributes."""
         self.assertTrue(set(ROUTES.keys()).issubset(dir(self.client)))
 
-    # @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
-    # def test_get_data_tables(self) -> None:
-    #     """Test retrieving all data tables."""
-    #     tables = self.client.get_data_tables()
-    # self.assertIsInstance(tables, DataTables)
-    # self.assertTrue(hasattr(tables[0], "table_name"))
-    # self.assertTrue(hasattr(tables[0], "display_name"))
-    # self.assertTrue(hasattr(tables[0], "user_id"))
-    # self.assertTrue(hasattr(tables[0], "created_on"))
-    # self.assertTrue(hasattr(tables[0], "last_updated"))
-    # self.assertTrue(hasattr(tables[0], "table_type"))
-    # self.assertTrue(hasattr(tables[0], "visibility"))
-    # self.assertTrue(hasattr(tables[0], "database_schema"))
-    # self.assertTrue(all(isinstance(table, DataTable) for table in tables))
+    @unittest.skipUnless(ADMIN_API_TOKEN, "DATASCRIBE_ADMIN_API_TOKEN not set in environment")
+    def test_get_data_tables(self) -> None:
+        """Test retrieving all data tables."""
+        self.client = DataScribeClient(api_key=ADMIN_API_TOKEN)
+        tables = self.client.get_data_tables()
+        self.assertIsInstance(tables, DataTables)
+        self.assertTrue(hasattr(tables[0], "table_name"))
+        self.assertTrue(hasattr(tables[0], "display_name"))
+        self.assertTrue(hasattr(tables[0], "user_id"))
+        self.assertTrue(hasattr(tables[0], "created_on"))
+        self.assertTrue(hasattr(tables[0], "last_updated"))
+        self.assertTrue(hasattr(tables[0], "table_type"))
+        self.assertTrue(hasattr(tables[0], "visibility"))
+        self.assertTrue(hasattr(tables[0], "database_schema"))
+        self.assertTrue(all(isinstance(table, DataTable) for table in tables))
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_data_table(self) -> None:
@@ -126,6 +123,7 @@ class TestDataScribeClient(unittest.TestCase):
         """Test retrieving all data tables for the user."""
         tables = self.client.get_data_tables_for_user()
         self.assertIsInstance(tables, DataTables)
+        self.assertIsNotNone(len(tables))
         self.assertTrue(hasattr(tables[0], "table_name"))
         self.assertTrue(hasattr(tables[0], "display_name"))
         self.assertTrue(hasattr(tables[0], "user_id"))
@@ -226,6 +224,16 @@ class TestDataScribeClient(unittest.TestCase):
             self.assertIsInstance(tables, DataTables)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_data_table_columns_len(self):
+        """Test data table columns length."""
+        columns = [
+            DataTableColumn(column_name="a", data_type="int", is_nullable="NO"),
+            DataTableColumn(column_name="b", data_type="str", is_nullable="YES"),
+        ]
+        dtc = DataTableColumns(table_name="t", display_name="T", columns=columns)
+        self.assertEqual(len(dtc), 2)
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_dict(self) -> None:
         """Test filtering rows using a filter as a dict."""
         table_name, column_name = self._get_valid_table_and_column()
@@ -256,7 +264,7 @@ class TestDataScribeClient(unittest.TestCase):
     def test_filtering_with_in_operator(self) -> None:
         """Test filtering rows using the 'in' operator."""
         table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).in_(["test", "foo", "bar"])
+        filters = Filter(column_name).in_([column_name, "test", "foo", "bar"])
         try:
             rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
             self.assertIsInstance(rows, DataTableRows)
@@ -272,18 +280,15 @@ class TestDataScribeClient(unittest.TestCase):
             rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
             self.assertIsInstance(rows, DataTableRows)
         except HTTPError:
-            pass
+            pass  # Acceptable if no matching rows or unsupported type
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_is_null_operator(self) -> None:
         """Test filtering rows using the 'is null' operator."""
         table_name, column_name = self._get_valid_table_and_column()
         filters = Filter(column_name).is_null()
-        try:
-            rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
-            self.assertIsInstance(rows, DataTableRows)
-        except HTTPError:
-            pass
+        rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+        self.assertIsInstance(rows, DataTableRows)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_invalid_type_raises(self) -> None:

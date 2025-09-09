@@ -7,13 +7,16 @@ It verifies correct behavior for data table retrieval, metadata, columns, rows, 
 import json
 import os
 import re
+import subprocess
 import unittest
 
 from typer.testing import CliRunner
 
-from datascribe_cli.cli import app
+from datascribe_api.filter import Filter
+from datascribe_cli.cli import app, parse_filter_string
 
 API_TOKEN: str | None = os.environ.get("DATASCRIBE_API_TOKEN")
+ADMIN_API_TOKEN: str | None = os.environ.get("DATASCRIBE_ADMIN_API_TOKEN")
 runner = CliRunner()
 
 
@@ -38,17 +41,43 @@ class TestDataScribeCLI(unittest.TestCase):
         self.columns_arg = ",".join(column_names[:3])
         self.assertIsNotNone(self.columns_arg)
 
-    # def test_data_tables(self) -> None:
-    #     """Test retrieving all data tables."""
-    #     result = runner.invoke(app, ["data-tables", "--api-key", API_TOKEN])
-    #     self.assertEqual(result.exit_code, 0)
-    #     self.assertIn("table_name", result.output)
-    #
-    # def test_data_tables_json(self) -> None:
-    #     """Test retrieving all data tables with JSON output."""
-    #     result = runner.invoke(app, ["data-tables", "--api-key", API_TOKEN, "--json"])
-    #     self.assertEqual(result.exit_code, 0)
-    #     self.assertNotIn("table_name", result.output)
+    def test_script_runs_cli(self):
+        """Test script runs CLI."""
+        result = subprocess.run(
+            ["datascribe_cli", "--help"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Datascribe CLI", result.stdout)
+        self.assertIn("Usage:", result.stdout)
+
+    def test_main_entry_point_runs_cli(self):
+        """Test that running datascribe_cli as a module shows the CLI help."""
+        result = subprocess.run(
+            ["python", "-m", "datascribe_cli", "--help"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Datascribe CLI", result.stdout)
+        self.assertIn("Usage:", result.stdout)
+
+    @unittest.skipUnless(ADMIN_API_TOKEN, "DATASCRIBE_ADMIN_API_TOKEN not set in environment")
+    def test_data_tables(self) -> None:
+        """Test retrieving all data tables."""
+        result = runner.invoke(app, ["data-tables", "--api-key", ADMIN_API_TOKEN])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("table_name", result.output)
+
+    @unittest.skipUnless(ADMIN_API_TOKEN, "DATASCRIBE_ADMIN_API_TOKEN not set in environment")
+    def test_data_tables_json(self) -> None:
+        """Test retrieving all data tables with JSON output."""
+        result = runner.invoke(app, ["data-tables", "--api-key", ADMIN_API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("table_name", result.output)
 
     def test_data_tables_insufficient_permissions(self) -> None:
         """Test that insufficient permissions returns an error."""
@@ -519,3 +548,75 @@ class TestDataScribeCLI(unittest.TestCase):
         )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRowsCount", result.stdout)
+
+    def test_is_null(self):
+        """Test parse_filter_string with 'is null' operator."""
+        f = parse_filter_string("foo is null")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "is null")
+
+    def test_is_not_null(self):
+        """Test parse_filter_string with 'is not null' operator."""
+        f = parse_filter_string("foo is not null")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "is not null")
+
+    def test_in(self):
+        """Test parse_filter_string with 'in' operator."""
+        f = parse_filter_string("bar in a,b,c")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "in")
+
+    def test_not_in(self):
+        """Test parse_filter_string with 'not in' operator."""
+        f = parse_filter_string("bar not in a,b,c")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "not in")
+
+    def test_like(self):
+        """Test parse_filter_string with 'like' operator."""
+        f = parse_filter_string("baz like %foo%")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "like")
+
+    def test_ilike(self):
+        """Test parse_filter_string with 'ilike' operator."""
+        f = parse_filter_string("baz ilike %foo%")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "ilike")
+
+    def test_eq(self):
+        """Test parse_filter_string with '==' operator."""
+        f = parse_filter_string("col==val")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "=")
+
+    def test_ne(self):
+        """Test parse_filter_string with '!=' operator."""
+        f = parse_filter_string("col!=val")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "!=")
+
+    def test_gt(self):
+        """Test parse_filter_string with '>' operator."""
+        f = parse_filter_string("col>5")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], ">")
+
+    def test_ge(self):
+        """Test parse_filter_string with '>=' operator."""
+        f = parse_filter_string("col>=5")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], ">=")
+
+    def test_lt(self):
+        """Test parse_filter_string with '<' operator."""
+        f = parse_filter_string("col<5")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "<")
+
+    def test_le(self):
+        """Test parse_filter_string with '<=' operator."""
+        f = parse_filter_string("col<=5")
+        self.assertIsInstance(f, Filter)
+        self.assertEqual(f.to_dict()["operator"], "<=")
