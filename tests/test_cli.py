@@ -8,6 +8,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import unittest
 
 from typer.testing import CliRunner
@@ -56,7 +57,7 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_main_entry_point_runs_cli(self):
         """Test that running datascribe_cli as a module shows the CLI help."""
         result = subprocess.run(
-            ["python", "-m", "datascribe_cli", "--help"],
+            [sys.executable, "-m", "datascribe_cli", "--help"],
             check=False,
             capture_output=True,
             text=True,

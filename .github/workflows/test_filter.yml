@@ -35,5 +35,6 @@ jobs:
       - name: Run tests
         env:
           DATASCRIBE_API_TOKEN: ${{ secrets.DATASCRIBE_API_TOKEN }}
+          DATASCRIBE_ADMIN_API_TOKEN: ${{ secrets.DATASCRIBE_ADMIN_API_TOKEN }}
         run: |
           uv run python -m unittest tests/test_filter.py
