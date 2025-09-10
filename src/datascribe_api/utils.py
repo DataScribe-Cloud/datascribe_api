@@ -1,4 +1,4 @@
-"""Utility functions for the datascribe API.
+"""Utility functions for the DataScribe API.
 
 This module provides utility functions for DataScribe API interactions.
 """

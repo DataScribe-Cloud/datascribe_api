@@ -1,4 +1,4 @@
-"""Datascribe CLI - A command-line interface for interacting with the DataScribe API."""
+"""DataScribe CLI - A command-line interface for interacting with the DataScribe API."""
 
 import re
 from typing import Annotated
@@ -10,7 +10,7 @@ from rich.panel import Panel
 from datascribe_api import DataScribeClient
 from datascribe_api.filter import Filter
 
-app = typer.Typer(help="Datascribe CLI - Interact with the DataScribe API.", pretty_exceptions_show_locals=False)
+app = typer.Typer(help="DataScribe CLI - Interact with the DataScribe API.", pretty_exceptions_show_locals=False)
 
 
 def handle_error(e: Exception) -> None:

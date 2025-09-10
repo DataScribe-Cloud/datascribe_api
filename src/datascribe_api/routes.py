@@ -1,6 +1,6 @@
-"""Routes for the Datascribe API.
+"""Routes for the DataScribe API.
 
-This module defines the API endpoints and their corresponding models for the Datascribe API.
+This module defines the API endpoints and their corresponding models for the DataScribe API.
 """
 
 from datascribe_api.models import (

@@ -1,6 +1,6 @@
 # `datascribe_cli`
 
-Datascribe CLI - Interact with the DataScribe API.
+DataScribe CLI - Interact with the DataScribe API.
 
 **Usage**:
 

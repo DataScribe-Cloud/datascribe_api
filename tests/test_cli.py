@@ -1,6 +1,6 @@
 """Testing suite for the CLI module.
 
-This module contains unittests for the datascribe_cli Typer CLI commands.
+This module contains unittests for the DataScribe Typer CLI commands.
 It verifies correct behavior for data table retrieval, metadata, columns, rows, and error handling.
 """
 
@@ -13,8 +13,8 @@ import unittest
 
 from typer.testing import CliRunner
 
+from datascribe_api.cli import app, parse_filter_string
 from datascribe_api.filter import Filter
-from datascribe_cli.cli import app, parse_filter_string
 
 API_TOKEN: str | None = os.environ.get("DATASCRIBE_API_TOKEN")
 ADMIN_API_TOKEN: str | None = os.environ.get("DATASCRIBE_ADMIN_API_TOKEN")
@@ -23,7 +23,7 @@ runner = CliRunner()
 
 @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
 class TestDataScribeCLI(unittest.TestCase):
-    """Unit tests for the datascribe_cli Typer CLI."""
+    """Unit tests for the DataScribe Typer CLI."""
 
     def setUp(self) -> None:
         """Set up a table_name for use in tests."""
@@ -51,19 +51,19 @@ class TestDataScribeCLI(unittest.TestCase):
             text=True,
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Datascribe CLI", result.stdout)
+        self.assertIn("DataScribe CLI", result.stdout)
         self.assertIn("Usage:", result.stdout)
 
     def test_main_entry_point_runs_cli(self):
-        """Test that running datascribe_cli as a module shows the CLI help."""
+        """Test that running DataScribe Typer CLI as a module shows the CLI help."""
         result = subprocess.run(
-            [sys.executable, "-m", "datascribe_cli", "--help"],
+            [sys.executable, "-m", "datascribe_api", "--help"],
             check=False,
             capture_output=True,
             text=True,
         )
         self.assertEqual(result.returncode, 0)
-        self.assertIn("Datascribe CLI", result.stdout)
+        self.assertIn("DataScribe CLI", result.stdout)
         self.assertIn("Usage:", result.stdout)
 
     @unittest.skipUnless(ADMIN_API_TOKEN, "DATASCRIBE_ADMIN_API_TOKEN not set in environment")
@@ -426,19 +426,19 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that the CLI help command works."""
         result = runner.invoke(app, ["--help"])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("Datascribe CLI", result.output)
+        self.assertIn("DataScribe CLI", result.output)
 
     def test_runs_cli_application_successfully(self) -> None:
         """Ensure the CLI application runs without errors."""
         result = runner.invoke(app, [])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("Datascribe CLI", result.output)
+        self.assertIn("DataScribe CLI", result.output)
 
     def test_shows_help_message_when_no_command_is_provided(self) -> None:
         """Ensure the help message is displayed when no command is provided."""
         result = runner.invoke(app, [])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("Datascribe CLI", result.output)
+        self.assertIn("DataScribe CLI", result.output)
         self.assertIn("Usage:", result.output)
         self.assertIn("Options", result.output)
         self.assertIn("Commands", result.output)

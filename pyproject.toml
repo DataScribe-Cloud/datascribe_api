@@ -1,7 +1,7 @@
 [project]
 name = "datascribe_api"
-version = "1.0.0"
-description = "A Python client for the Datascribe API"
+version = "1.0.1"
+description = "A Python client for the DataScribe API"
 readme = "README.md"
 authors = [
     { name = "Doguhan Sariturk", email = "dogu.sariturk@gmail.com" }
@@ -44,7 +44,7 @@ dev = [
 ]
 
 [project.scripts]
-datascribe_cli = "datascribe_cli.cli:app"
+datascribe_cli = "datascribe_api.cli:app"
 
 [tool.ruff]
 line-length = 130

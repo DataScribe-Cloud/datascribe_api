@@ -131,10 +131,10 @@ rows = client.get_data_table_rows(tableName="users", columns=["age"], filters=fi
 You can also use the command-line interface to interact with the DataScribe API. Here are some examples:
 ```sh
 # List all data tables for the authenticated user
-datascribe_api data-tables-for-user
+datascribe_cli data-tables-for-user
 ```
 
-See the [CLI documentation](./src/datascribe_cli/README_CLI.md) for more commands and options.
+See the [CLI documentation](README_CLI.md) for more commands and options.
 
 ---
 

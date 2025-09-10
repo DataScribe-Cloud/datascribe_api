@@ -108,8 +108,8 @@ wheels = [
 ]
 
 [[package]]
-name = "datascribe_api"
-version = "1.0.0"
+name = "datascribe-api"
+version = "1.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
