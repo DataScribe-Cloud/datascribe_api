@@ -10,6 +10,8 @@
 [![Test CLI](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_cli.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_cli.yml)
 [![Test Filter](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_filter.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test_filter.yml)
 
+[![DOI](https://zenodo.org/badge/1024595385.svg)](https://doi.org/10.5281/zenodo.17090844)
+
 `datascribe_api` is a Python client for interacting with the DataScribe API. It allows users to search for data tables and their metadata, automating data retrieval and analysis workflows.
 
 <p>
