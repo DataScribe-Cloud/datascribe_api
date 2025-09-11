@@ -621,3 +621,96 @@ class TestDataScribeCLI(unittest.TestCase):
         f = parse_filter_string("col<=5")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "<=")
+
+    def test_get_material_by_id_mp(self):
+        """Test get_material_by_id with a valid MP material ID and --mp flag."""
+        result = runner.invoke(
+            app, ["get-material-by-id", "mp-149", "--mp", "--api-key", API_TOKEN, "--json"]
+        )  # TODO: Replace MP material ID
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("provider", result.output)  # TODO
+        self.assertIn("data", result.output)  # TODO
+        self.assertIn("mp-149", result.output)  # TODO
+
+    def test_get_material_by_id_aflow(self):
+        """Test get_material_by_id with a valid AFLOW material ID and --aflow flag."""
+        aflow_id = "aflow:e9c6d914c4b8d9ca"
+        result = runner.invoke(
+            app, ["get-material-by-id", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"]
+        )  # TODO: Replace AFLOW material ID
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("provider", result.output)  # TODO
+        self.assertIn("data", result.output)  # TODO
+        self.assertIn("aflow", result.output)  # TODO
+
+    def test_get_material_by_id_invalid(self):
+        """Test get_material_by_id with an invalid material ID."""
+        result = runner.invoke(app, ["get-material-by-id", "invalid-id-123", "--mp", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)  # TODO
+        # Should not contain a valid data object
+        self.assertNotIn('"data": {', result.output)  # TODO
+
+    def test_get_material_by_id_multiple_providers(self):
+        """Test get_material_by_id with multiple providers."""
+        result = runner.invoke(app, ["get-material-by-id", "mp-149", "--mp", "--aflow", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("provider", result.output)  # TODO
+        self.assertIn("results", result.output)  # TODO
+
+    def test_search_materials_basic(self):
+        """Test search_materials with a valid formula and elements."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)  # TODO
+        self.assertIn("SiO2", result.output)  # TODO
+
+    def test_search_materials_with_props(self):
+        """Test search_materials with property filters."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "band_gap", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)  # TODO
+        self.assertIn("band_gap", result.output)  # TODO
+
+    def test_search_materials_pagination(self):
+        """Test search_materials with pagination options."""
+        result = runner.invoke(
+            app,
+            [
+                "search-materials",
+                "SiO2",
+                "Si,O",
+                "",
+                "",
+                "",
+                "",
+                "--mp",
+                "--api-key",
+                API_TOKEN,
+                "--json",
+                "--page",
+                "1",
+                "--size",
+                "2",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)  # TODO
+
+    def test_search_materials_invalid(self):
+        """Test search_materials with invalid/empty input."""
+        result = runner.invoke(app, ["search-materials", "", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)  # TODO
+
+    def test_search_materials_json_output(self):
+        """Test search_materials with JSON output flag."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertTrue(result.output.strip().startswith("{"))  # TODO

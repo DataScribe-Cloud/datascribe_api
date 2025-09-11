@@ -41,7 +41,7 @@ class TestDataScribeClient(unittest.TestCase):
         """Clean up the DataScribeClient instance after each test."""
         self.client.close()
 
-    def _get_valid_table_and_column(self) -> tuple[str, str]:
+    def _get_valid_table_and_column(self) -> tuple[str | None, str]:
         """Helper to get a valid table name and a column name for filtering tests.
 
         Returns:
@@ -51,7 +51,7 @@ class TestDataScribeClient(unittest.TestCase):
             unittest.SkipTest: If no valid table/column is found.
         """
         tables = self.client.get_data_tables_for_user()
-        table_name = getattr(tables[0], "table_name", None)
+        table_name: str | None = getattr(tables[0], "table_name", None)
         columns = self.client.get_data_table_columns(tableName=table_name)
         return table_name, columns.columns[0].column_name
 
@@ -296,3 +296,110 @@ class TestDataScribeClient(unittest.TestCase):
         table_name, column_name = self._get_valid_table_and_column()
         with self.assertRaises(TypeError):
             self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=123)
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_get_materials_by_id_mp(self):
+        """Test get_materials_by_id with a valid MP material ID and provider."""
+        result = self.client.get_materials_by_id(id="mp-149", provider=["MP"])  # TODO
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
+        if result.results:
+            self.assertEqual(result.results[0].provider.lower(), "mp")  # TODO
+            self.assertIn("material_id", result.results[0].data)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_get_materials_by_id_aflow(self):
+        """Test get_materials_by_id with a valid AFLOW material ID and provider."""
+        aflow_id = "aflow:e9c6d914c4b8d9ca"  # TODO
+        result = self.client.get_materials_by_id(id=aflow_id, provider=["AFLOW"])
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
+        if result.results:
+            self.assertEqual(result.results[0].provider.lower(), "aflow")  # TODO
+            self.assertIn("auid", result.results[0].data)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_get_materials_by_id_invalid(self):
+        """Test get_materials_by_id with an invalid material ID."""
+        result = self.client.get_materials_by_id(id="invalid-id-123", provider=["MP"])
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertEqual(result.total, 0)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_get_materials_by_id_multiple_providers(self):
+        """Test get_materials_by_id with multiple providers."""
+        result = self.client.get_materials_by_id(id="mp-149", provider=["MP", "AFLOW"])  # TODO
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_search_materials_basic(self):
+        """Test search_materials with a valid formula and elements."""
+        result = self.client.search_materials(
+            formula="SiO2",  # TODO
+            elements="Si,O",  # TODO
+            exclude_elements="",  # TODO
+            spacegroup="",  # TODO
+            props="",  # TODO
+            temperature="",  # TODO
+            page=1,
+            size=2,
+            provider=["MP"],  # TODO
+        )
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
+        if result.results:
+            self.assertIn("SiO2", result.results[0].formula)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_search_materials_with_props(self):
+        """Test search_materials with property filters."""
+        result = self.client.search_materials(
+            formula="SiO2",  # TODO
+            elements="Si,O",  # TODO
+            exclude_elements="",  # TODO
+            spacegroup="",  # TODO
+            props="band_gap",  # TODO
+            temperature="",  # TODO
+            page=1,  # TODO
+            size=2,  # TODO
+            provider=["MP"],  # TODO
+        )
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
+        if result.results:
+            self.assertIn("band_gap", result.results[0].key_props)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_search_materials_pagination(self):
+        """Test search_materials with pagination options."""
+        result = self.client.search_materials(
+            formula="SiO2",  # TODO
+            elements="Si,O",  # TODO
+            exclude_elements="",  # TODO
+            spacegroup="",  # TODO
+            props="",  # TODO
+            temperature="",  # TODO
+            page=1,  # TODO
+            size=1,  # TODO
+            provider=["MP"],  # TODO
+        )
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertLessEqual(len(result.results), 1)  # TODO
+
+    @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
+    def test_search_materials_invalid(self):
+        """Test search_materials with invalid/empty input."""
+        result = self.client.search_materials(
+            formula="",  # TODO
+            elements="",  # TODO
+            exclude_elements="",  # TODO
+            spacegroup="",  # TODO
+            props="",  # TODO
+            temperature="",  # TODO
+            page=1,  # TODO
+            size=2,  # TODO
+            provider=["MP"],  # TODO
+        )
+        self.assertIsInstance(result.results, list)  # TODO
+        self.assertGreaterEqual(result.total, 0)  # TODO
