@@ -181,3 +181,71 @@ class DataTables(RootModel):
     def __len__(self) -> int:
         """Return the number of tables."""
         return len(self.root)
+
+
+class Provenance(BaseModel):
+    """Represents the provenance information for a material.
+
+    Attributes:
+        provider (str): The name of the data provider or source.
+        id (str): The unique identifier of the material in the provider's database.
+    """
+
+    provider: str
+    id: str
+
+
+class MaterialSummary(BaseModel):
+    """Represents a summary of material information.
+
+    Attributes:
+        material_id (str): The unique identifier for the material.
+        formula (str): The chemical formula of the material.
+        elements (List[str]): List of element symbols present in the material.
+        systems (List[str]): List of crystal systems associated with the material.
+        key_props (Dict[str, Any]): Dictionary of key material properties (e.g., bandgap, formation energy).
+        provenance (List[Provenance]): List of provenance information for the material.
+    """
+
+    material_id: str
+    formula: str
+    elements: list[str]
+    systems: list[str]
+    key_props: dict[str, Any]
+    provenance: list[Provenance]
+
+
+class MaterialSearchResults(BaseModel):
+    """Represents the results of a material search operation.
+
+    Attributes:
+        results (List[MaterialSummary]): List of material summary objects returned by the search.
+        total (int): Total number of materials found in the search.
+    """
+
+    results: list[MaterialSummary]
+    total: int
+
+
+class MaterialByIdResult(BaseModel):
+    """Represents a single material result from a provider for a material ID lookup.
+
+    Attributes:
+        provider (str): The name of the data provider (e.g., 'materials_project', 'aflow').
+        data (dict[str, Any]): The raw material document returned by the provider.
+    """
+
+    provider: str
+    data: dict[str, Any]
+
+
+class MaterialByIdResults(BaseModel):
+    """Represents the results of a material ID lookup across multiple providers.
+
+    Attributes:
+        results (List[MaterialByIdResult]): List of results from each provider.
+        total (int): Total number of materials found across all providers.
+    """
+
+    results: list[MaterialByIdResult]
+    total: int

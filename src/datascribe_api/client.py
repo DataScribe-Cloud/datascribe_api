@@ -23,12 +23,12 @@ class DataScribeClient:
         session (Session): The session used for making HTTP requests with retry logic.
     """
 
-    def __init__(self, api_key: str | None = None, base: str = "https://datascribe.cloud/data/") -> None:
+    def __init__(self, api_key: str | None = None, base: str = "https://datascribe.cloud/") -> None:
         """Initialize the DataScribe API client.
 
         Args:
             api_key (str | None): The API key for authentication. If not provided, it will be read from the environment variable `DATASCRIBE_API_TOKEN`.
-            base (str): The base URL for the DataScribe API. Defaults to "https://datascribe.cloud/data".
+            base (str): The base URL for the DataScribe API. Defaults to "https://datascribe.cloud/".
 
         Raises:
             ValueError: If the API key is not provided and not found in the environment variables.
