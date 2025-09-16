@@ -187,9 +187,7 @@ $ datascribe_cli get-material-by-id [OPTIONS] MATERIAL_ID
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--mp`: Query Materials Project provider.
-* `--jarvis`: Query JARVIS provider.
 * `--aflow`: Query AFLOW provider.
-* `--oqmd`: Query OQMD provider.
 * `--json`: Output in JSON format.
 
 ---
@@ -217,9 +215,7 @@ $ datascribe_cli search-materials [OPTIONS] FORMULA ELEMENTS EXCLUDE_ELEMENTS SP
 
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--mp`: Query Materials Project provider.
-* `--jarvis`: Query JARVIS provider.
 * `--aflow`: Query AFLOW provider.
-* `--oqmd`: Query OQMD provider.
 * `--page INTEGER`: Page number for paginated results.   [default: 1]
 * `--size INTEGER`: Number of results per page.   [default: 50]
 * `--json`: Output in JSON format.

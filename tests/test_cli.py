@@ -624,48 +624,46 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_get_material_by_id_mp(self) -> None:
         """Test get_material_by_id with a valid MP material ID and --mp flag."""
-        result = runner.invoke(
-            app, ["get-material-by-id", "mp-149", "--mp", "--api-key", API_TOKEN, "--json"]
-        )  # TODO: Replace MP material ID
+        result = runner.invoke(app, ["get-material-by-id", "mp-149", "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("provider", result.output)  # TODO
-        self.assertIn("data", result.output)  # TODO
-        self.assertIn("mp-149", result.output)  # TODO
+        self.assertIn("provider", result.output)
+        self.assertIn("data", result.output)
+        self.assertIn("mp-149", result.output)
 
     def test_get_material_by_id_aflow(self) -> None:
         """Test get_material_by_id with a valid AFLOW material ID and --aflow flag."""
-        aflow_id = "aflow:e9c6d914c4b8d9ca"
-        result = runner.invoke(
-            app, ["get-material-by-id", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"]
-        )  # TODO: Replace AFLOW material ID
+        aflow_id = "aflow:08ab41c5f54850db"
+        result = runner.invoke(app, ["get-material-by-id", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("provider", result.output)  # TODO
-        self.assertIn("data", result.output)  # TODO
-        self.assertIn("aflow", result.output)  # TODO
+        self.assertIn("provider", result.output)
+        self.assertIn("data", result.output)
+        self.assertIn("aflow", result.output)
 
     def test_get_material_by_id_invalid(self) -> None:
         """Test get_material_by_id with an invalid material ID."""
-        result = runner.invoke(app, ["get-material-by-id", "invalid-id-123", "--mp", "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["get-material-by-id", "mp-invalid", "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("results", result.output)  # TODO
-        # Should not contain a valid data object
-        self.assertNotIn('"data": {', result.output)  # TODO
+        self.assertIn("results", result.output)
+        self.assertIn('"total":0', result.output)
+        self.assertNotIn('"data": {', result.output)
 
-    def test_get_material_by_id_multiple_providers(self) -> None:
-        """Test get_material_by_id with multiple providers."""
-        result = runner.invoke(app, ["get-material-by-id", "mp-149", "--mp", "--aflow", "--api-key", API_TOKEN, "--json"])
-        self.assertEqual(result.exit_code, 0)
-        self.assertIn("provider", result.output)  # TODO
-        self.assertIn("results", result.output)  # TODO
-
-    def test_search_materials_basic(self) -> None:
+    def test_search_materials_mp(self) -> None:
         """Test search_materials with a valid formula and elements."""
         result = runner.invoke(
             app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("results", result.output)  # TODO
-        self.assertIn("SiO2", result.output)  # TODO
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
+
+    def test_search_materials_aflow(self) -> None:
+        """Test search_materials with a valid formula and elements."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
 
     def test_search_materials_with_props(self) -> None:
         """Test search_materials with property filters."""
@@ -673,8 +671,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app, ["search-materials", "SiO2", "Si,O", "", "", "band_gap", "", "--mp", "--api-key", API_TOKEN, "--json"]
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("results", result.output)  # TODO
-        self.assertIn("band_gap", result.output)  # TODO
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
+        self.assertIn("bandgap", result.output)
 
     def test_search_materials_pagination(self) -> None:
         """Test search_materials with pagination options."""
@@ -699,13 +698,30 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("results", result.output)  # TODO
+        self.assertIn("SiO2", result.output)
+        self.assertIn("results", result.output)
 
-    def test_search_materials_invalid(self) -> None:
-        """Test search_materials with invalid/empty input."""
+    def test_search_materials_empty_input(self) -> None:
+        """Test search_materials with empty input."""
         result = runner.invoke(app, ["search-materials", "", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("results", result.output)  # TODO
+        self.assertIn('"results": []', result.output)
+
+    def test_search_materials_invalid_mp(self) -> None:
+        """Test search_materials with empty input."""
+        result = runner.invoke(
+            app, ["search-materials", "mp-invalid", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn('"results":[]', result.output)
+
+    def test_search_materials_invalid_aflow(self) -> None:
+        """Test search_materials with empty input."""
+        result = runner.invoke(
+            app, ["search-materials", "mp-invalid", "", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn('"results": []', result.output)
 
     def test_search_materials_json_output(self) -> None:
         """Test search_materials with JSON output flag."""
@@ -713,4 +729,5 @@ class TestDataScribeCLI(unittest.TestCase):
             app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertTrue(result.output.strip().startswith("{"))  # TODO
+        self.assertIn("SiO2", result.output)
+        self.assertIn("results", result.output)

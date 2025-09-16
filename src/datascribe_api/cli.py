@@ -209,15 +209,13 @@ def get_material_by_id(
     material_id: Annotated[str, typer.Argument(help="Material ID to retrieve (e.g., mp-190, aflow:xxxx).")],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
-    jarvis: Annotated[bool, typer.Option("--jarvis", help="Query JARVIS provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
-    oqmd: Annotated[bool, typer.Option("--oqmd", help="Query OQMD provider.")] = False,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Get material details by ID from selected providers."""
     try:
         with DataScribeClient(api_key=api_key) as client:
-            provider = [p for p, flag in (("MP", mp), ("JARVIS", jarvis), ("AFLOW", aflow), ("OQMD", oqmd)) if flag] or "ALL"
+            provider = ",".join([p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag]) or "ALL"
             material = client.get_material_by_id(id=material_id, provider=provider)
             if json:
                 typer.echo(material.model_dump_json())
@@ -239,9 +237,7 @@ def search_materials(
     temperature: Annotated[str, typer.Argument(help="Temperature filter (if supported by provider).")],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
-    jarvis: Annotated[bool, typer.Option("--jarvis", help="Query JARVIS provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
-    oqmd: Annotated[bool, typer.Option("--oqmd", help="Query OQMD provider.")] = False,
     page: Annotated[int, typer.Option(help="Page number for paginated results. ")] = 1,
     size: Annotated[int, typer.Option(help="Number of results per page. ")] = 50,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
@@ -249,7 +245,7 @@ def search_materials(
     """Search for materials using formula, elements, and other filters."""
     try:
         with DataScribeClient(api_key=api_key) as client:
-            provider = [p for p, flag in (("MP", mp), ("JARVIS", jarvis), ("AFLOW", aflow), ("OQMD", oqmd)) if flag] or "ALL"
+            provider = [p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag] or "ALL"
             materials = client.search_materials(
                 formula=formula,
                 elements=elements,
@@ -259,7 +255,7 @@ def search_materials(
                 temperature=temperature,
                 page=page,
                 size=size,
-                provider=provider,
+                prov=provider,
             )
             if json:
                 typer.echo(materials.model_dump_json())
