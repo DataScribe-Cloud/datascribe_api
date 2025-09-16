@@ -227,6 +227,12 @@ class MaterialSearchResults(BaseModel):
     total: int
 
 
+class MaterialData(BaseModel):
+    """Represents a Material's information."""
+
+    model_config = ConfigDict(extra="allow")
+
+
 class MaterialByIdResult(BaseModel):
     """Represents a single material result from a provider for a material ID lookup.
 
@@ -236,7 +242,7 @@ class MaterialByIdResult(BaseModel):
     """
 
     provider: str
-    data: dict[str, Any]
+    data: MaterialData
 
 
 class MaterialByIdResults(BaseModel):
