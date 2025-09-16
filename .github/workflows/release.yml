@@ -4,8 +4,12 @@ on:
     types: ["published"]
 
 jobs:
-  run:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  release:
     name: "Build and publish release"
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
