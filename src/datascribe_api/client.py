@@ -69,6 +69,7 @@ class DataScribeClient:
             HTTPError: If the request fails with a status code indicating an error.
         """
         url = f"{self._base}{path}"
+
         filters = params.get("filters")
         if filters is not None:
             try:
@@ -76,6 +77,11 @@ class DataScribeClient:
             except Exception as e:
                 raise TypeError(f"Invalid filters: {e}") from e
             params["filters"] = json.dumps(serialized)
+
+        providers = params.get("prov")
+        if providers is not None:
+            params["prov"] = ",".join(providers)
+
         try:
             resp = self._session.get(url=url, params=params, timeout=30)
             resp.raise_for_status()
