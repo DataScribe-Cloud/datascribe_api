@@ -70,17 +70,18 @@ class DataScribeClient:
         """
         url = f"{self._base}{path}"
 
-        filters = params.get("filters")
-        if filters is not None:
+        if (filters := params.get("filters")) is not None:
             try:
                 serialized = Filter.serialize(filters)
             except Exception as e:
                 raise TypeError(f"Invalid filters: {e}") from e
             params["filters"] = json.dumps(serialized)
 
-        providers = params.get("prov")
-        if providers is not None:
-            params["prov"] = ",".join(providers)
+        if providers := params.get("providers"):
+            params["providers"] = ",".join(providers) if isinstance(providers, list) else providers
+
+        if provider := params.get("provider"):
+            params["provider"] = ",".join(provider) if isinstance(provider, list) else provider
 
         try:
             resp = self._session.get(url=url, params=params, timeout=30)
