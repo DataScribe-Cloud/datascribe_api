@@ -67,7 +67,7 @@ Below is a list of all available endpoints in the DataScribe API Python client:
 | get_data_table_rows_count | /data/data-table-rows-count | tableName, filters                                                                    | Get row count for a data table            |
 | get_data_table_columns    | /data/data-table-columns    | tableName                                                                             | Get columns of a data table               |
 | get_data_table_metadata   | /data/data-table-metadata   | tableName                                                                             | Get metadata for a data table             |
-| get_material_by_id        | /materials                  | id, provider                                                                          | Get material by ID                        |
+| get_material_by_id        | /materials                  | material_id, provider                                                                 | Get material by ID                        |
 | search_materials          | /materials/search           | formula, elements, exclude_elements, spacegroup, props, temperature, prov, page, size | Search for materials                      |
 
 ---
@@ -147,9 +147,15 @@ rows = client.get_data_table_rows(tableName="users", columns=["age"], filters=fi
 ### CLI Usage
 
 You can also use the command-line interface to interact with the DataScribe API. Here are some examples:
+
 ```sh
 # List all data tables for the authenticated user
 datascribe_cli data-tables-for-user
+```
+
+```sh
+# Retrieve rows from the data table named m3gnet_mpf
+datascribe_cli data-table m3gnet_mpf
 ```
 
 See the [CLI documentation](README_CLI.md) for more commands and options.
