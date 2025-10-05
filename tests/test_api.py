@@ -300,16 +300,17 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_material_by_id_mp(self) -> None:
         """Test get_material_by_id with a valid MP material ID and provider."""
-        result = self.client.get_material_by_id(id="mp-149", provider=["MP"])
+        result = self.client.get_material_by_id(material_id="mp-149", provider="MP")
         self.assertEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.results[0].provider.lower(), "mp")
         self.assertEqual(result.results[0].data.material_id, "mp-149")
+        self.assertEqual(result.results[0].data.formula_pretty, "Si")
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_material_by_id_aflow(self) -> None:
         """Test get_material_by_id with a valid AFLOW material ID and provider."""
-        result = self.client.get_material_by_id(id="08ab41c5f54850db", provider=["AFLOW"])
+        result = self.client.get_material_by_id(material_id="08ab41c5f54850db", provider="AFLOW")
         self.assertEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.results[0].provider.lower(), "aflow")
@@ -318,7 +319,7 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_material_by_id_full_aflow(self) -> None:
         """Test get_material_by_id with a valid full AFLOW material ID and provider."""
-        result = self.client.get_material_by_id(id="aflow:08ab41c5f54850db", provider=["AFLOW"])
+        result = self.client.get_material_by_id(material_id="aflow:08ab41c5f54850db", provider="AFLOW")
         self.assertEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.results[0].provider.lower(), "aflow")
@@ -327,7 +328,7 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_material_by_id_invalid(self) -> None:
         """Test get_material_by_id with an invalid material ID."""
-        result = self.client.get_material_by_id(id="invalid-id-123", provider=["MP"])
+        result = self.client.get_material_by_id(material_id="invalid-id-123", provider="MP")
         self.assertEqual(result.total, 0)
         self.assertIsInstance(result.results, list)
 
@@ -341,7 +342,7 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            prov=["MP"],
+            providers="MP",
         )
         self.assertGreaterEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
@@ -357,7 +358,7 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            prov=["AFLOW"],
+            providers="AFLOW",
         )
         self.assertGreaterEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
@@ -373,7 +374,7 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            prov=["MP", "AFLOW"],
+            providers=["MP", "AFLOW"],
         )
         self.assertGreaterEqual(result.total, 2)
         self.assertIsInstance(result.results, list)
@@ -389,11 +390,10 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="band_gap",
             temperature="",
-            prov=["MP"],
+            providers="MP",
         )
         self.assertGreaterEqual(result.total, 1)
         self.assertIsInstance(result.results, list)
-        print(result.results[0].key_props)
         self.assertIn("bandgap", result.results[0].key_props.keys())
         self.assertIsNotNone(result.results[0].key_props["bandgap"])
 
@@ -408,7 +408,7 @@ class TestDataScribeClient(unittest.TestCase):
             props="",
             temperature="",
             size=1,
-            prov=["MP"],
+            providers="MP",
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(len(result.results), 1)
@@ -424,7 +424,7 @@ class TestDataScribeClient(unittest.TestCase):
             props="",
             temperature="",
             size=1,
-            prov=["AFLOW"],
+            providers="AFLOW",
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(len(result.results), 1)
@@ -439,8 +439,8 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            size=2,
-            prov=["MP", "AFLOW"],
+            size=1,
+            providers=["MP", "AFLOW"],
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(len(result.results), 2)
@@ -449,7 +449,7 @@ class TestDataScribeClient(unittest.TestCase):
     def test_search_materials_empty_formula_mp(self) -> None:
         """Test search_materials with invalid/empty input."""
         result = self.client.search_materials(
-            formula="", elements="", exclude_elements="", spacegroup="", props="", temperature="", prov=["MP"]
+            formula="", elements="", exclude_elements="", spacegroup="", props="", temperature="", providers=["MP"]
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.total, 0)
@@ -459,7 +459,7 @@ class TestDataScribeClient(unittest.TestCase):
     def test_search_materials_invalid_mp(self) -> None:
         """Test search_materials with invalid/empty input."""
         result = self.client.search_materials(
-            formula="mp-invalid", elements="", exclude_elements="", spacegroup="", props="", temperature="", prov=["MP"]
+            formula="mp-invalid", elements="", exclude_elements="", spacegroup="", props="", temperature="", providers=["MP"]
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.total, 0)
@@ -475,14 +475,14 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            prov=["AFLOW"],
+            providers="AFLOW",
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.total, 0)
         self.assertEqual(len(result.results), 0)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
-    def test_search_materials_invalid_two_provs(self) -> None:
+    def test_search_materials_invalid_two_providers(self) -> None:
         """Test search_materials with invalid/empty input."""
         result = self.client.search_materials(
             formula="invalid",
@@ -491,7 +491,7 @@ class TestDataScribeClient(unittest.TestCase):
             spacegroup="",
             props="",
             temperature="",
-            prov=["MP", "AFLOW"],
+            providers=["MP", "AFLOW"],
         )
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.total, 0)

@@ -216,7 +216,7 @@ def get_material_by_id(
     try:
         with DataScribeClient(api_key=api_key) as client:
             provider = ",".join([p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag]) or "ALL"
-            material = client.get_material_by_id(id=material_id, provider=provider)
+            material = client.get_material_by_id(material_id=material_id, provider=provider)
             if json:
                 typer.echo(material.model_dump_json())
             else:
@@ -245,7 +245,7 @@ def search_materials(
     """Search for materials using formula, elements, and other filters."""
     try:
         with DataScribeClient(api_key=api_key) as client:
-            provider = [p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag] or "ALL"
+            providers = [p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag] or "ALL"
             materials = client.search_materials(
                 formula=formula,
                 elements=elements,
@@ -253,9 +253,9 @@ def search_materials(
                 spacegroup=spacegroup,
                 props=props,
                 temperature=temperature,
+                providers=providers,
                 page=page,
                 size=size,
-                prov=provider,
             )
             if json:
                 typer.echo(materials.model_dump_json())
@@ -265,11 +265,5 @@ def search_materials(
         handle_error(e)
 
 
-@app.callback(invoke_without_command=True)
-def default(ctx: typer.Context) -> None:
-    """Default command that displays the help message."""
-    typer.echo(ctx.get_help())
-
-
 if __name__ == "__main__":
-    app(prog_name="datascribe-cli")
+    app(prog_name="datascribe-cli", invoke_without_command=True, no_args_is_help=True)
