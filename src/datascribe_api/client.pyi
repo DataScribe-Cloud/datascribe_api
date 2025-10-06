@@ -39,7 +39,7 @@ class DataScribeClient:
         exclude_elements: list[str] | str,
         spacegroup: str,
         props: list[str] | str,
-        temperature: float,
+        temperature: float | str,
         providers: list[str] | str,
         page: int = 1,
         size: int = 50,
