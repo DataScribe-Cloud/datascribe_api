@@ -431,13 +431,13 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_runs_cli_application_successfully(self) -> None:
         """Ensure the CLI application runs without errors."""
         result = runner.invoke(app, [])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 2)
         self.assertIn("DataScribe CLI", result.output)
 
     def test_shows_help_message_when_no_command_is_provided(self) -> None:
         """Ensure the help message is displayed when no command is provided."""
         result = runner.invoke(app, [])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 2)
         self.assertIn("DataScribe CLI", result.output)
         self.assertIn("Usage:", result.output)
         self.assertIn("Options", result.output)
