@@ -77,6 +77,9 @@ class DataScribeClient:
                 raise TypeError(f"Invalid filters: {e}") from e
             params["filters"] = json.dumps(serialized)
 
+        if material_id := params.get("material_id"):
+            params["id"] = ",".join(material_id) if isinstance(material_id, list) else material_id
+
         if providers := params.get("providers"):
             params["providers"] = ",".join(providers) if isinstance(providers, list) else providers
 
