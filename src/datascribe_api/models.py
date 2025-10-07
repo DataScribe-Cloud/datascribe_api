@@ -8,6 +8,7 @@ from collections.abc import Iterator
 from datetime import datetime
 from typing import Any
 
+import pandas as pd
 from pydantic import BaseModel, ConfigDict, RootModel
 
 
@@ -86,6 +87,14 @@ class DataTableColumns(BaseModel):
         """Return the number of columns."""
         return len(self.columns)
 
+    def to_dataframe(self):
+        """Return columns as a pandas DataFrame."""
+        return pd.DataFrame([col.model_dump() for col in self.columns])
+
+    def to_list(self):
+        """Return column names as a list."""
+        return [col.column_name for col in self.columns]
+
 
 class DataTableRowsCount(BaseModel):
     """Represents the count of rows in a data table.
@@ -95,6 +104,14 @@ class DataTableRowsCount(BaseModel):
     """
 
     total_rows: int
+
+    def to_dataframe(self):
+        """Return row count as a pandas DataFrame."""
+        return pd.DataFrame([self.model_dump()])
+
+    def to_list(self):
+        """Return row count as a list."""
+        return [self.total_rows]
 
 
 class DataTableRow(BaseModel):
@@ -117,6 +134,14 @@ class DataTableRows(RootModel):
     def __len__(self) -> int:
         """Return the number of rows."""
         return len(self.root)
+
+    def to_dataframe(self):
+        """Return rows as a pandas DataFrame."""
+        return pd.DataFrame([row.model_dump() for row in self.root])
+
+    def to_list(self):
+        """Return rows as a list of dicts."""
+        return [row.model_dump() for row in self.root]
 
 
 class DataTableMetadata(BaseModel):
@@ -141,6 +166,14 @@ class DataTableMetadata(BaseModel):
     table_type: str
     visibility: str
     database_schema: DatabaseSchema
+
+    def to_dataframe(self):
+        """Return metadata as a pandas DataFrame."""
+        return pd.DataFrame([self.model_dump()])
+
+    def to_list(self):
+        """Return metadata as a list of dicts."""
+        return [self.model_dump()]
 
 
 class DataTable(BaseModel):
@@ -181,6 +214,14 @@ class DataTables(RootModel):
     def __len__(self) -> int:
         """Return the number of tables."""
         return len(self.root)
+
+    def to_dataframe(self):
+        """Return tables as a pandas DataFrame."""
+        return pd.DataFrame([table.model_dump() for table in self.root])
+
+    def to_list(self):
+        """Return tables as a list of dicts."""
+        return [table.model_dump() for table in self.root]
 
 
 class Provenance(BaseModel):
@@ -226,6 +267,14 @@ class MaterialSearchResults(BaseModel):
     results: list[MaterialSummary]
     total: int
 
+    def to_dataframe(self):
+        """Return search results as a pandas DataFrame."""
+        return pd.DataFrame([summary.model_dump() for summary in self.results])
+
+    def to_list(self):
+        """Return search results as a list of dicts."""
+        return [summary.model_dump() for summary in self.results]
+
 
 class MaterialData(BaseModel):
     """Represents a Material's information."""
@@ -257,3 +306,11 @@ class MaterialByIdResults(BaseModel):
 
     results: list[MaterialByIdResult]
     total: int
+
+    def to_dataframe(self):
+        """Return results as a pandas DataFrame."""
+        return pd.DataFrame([result.model_dump() for result in self.results])
+
+    def to_list(self):
+        """Return results as a list of dicts."""
+        return [result.model_dump() for result in self.results]

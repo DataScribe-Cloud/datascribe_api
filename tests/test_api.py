@@ -139,8 +139,7 @@ class TestDataScribeClient(unittest.TestCase):
         """Test retrieving rows from a data table."""
         tables = self.client.get_data_tables_for_user()
         columns = self.client.get_data_table_columns(tableName=self.table_name)
-        column_list = [column.column_name for column in columns.columns]
-        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=column_list)
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=columns.to_list())
         self.assertIsInstance(tables, DataTables)
         self.assertIsInstance(columns, DataTableColumns)
         self.assertIsInstance(rows, DataTableRows)
