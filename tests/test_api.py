@@ -36,6 +36,7 @@ class TestDataScribeClient(unittest.TestCase):
     def setUp(self) -> None:
         """Set up a DataScribeClient instance for each test."""
         self.client = DataScribeClient(api_key=API_TOKEN)
+        self.table_name, self.column_name = self._get_valid_table_and_column()
 
     def tearDown(self) -> None:
         """Clean up the DataScribeClient instance after each test."""
@@ -51,7 +52,7 @@ class TestDataScribeClient(unittest.TestCase):
             unittest.SkipTest: If no valid table/column is found.
         """
         tables = self.client.get_data_tables_for_user()
-        table_name: str | None = getattr(tables[0], "table_name", None)
+        table_name: str | None = getattr(tables[-2], "table_name", None)
         columns = self.client.get_data_table_columns(tableName=table_name)
         return table_name, columns.columns[0].column_name
 
@@ -109,9 +110,8 @@ class TestDataScribeClient(unittest.TestCase):
     def test_get_data_table(self) -> None:
         """Test retrieving a specific data table and its rows."""
         tables = self.client.get_data_tables_for_user()
+        table = self.client.get_data_table(tableName=self.table_name)
         self.assertIsInstance(tables, DataTables)
-        table_name = getattr(tables[-2], "table_name", None)  # FIXME
-        table = self.client.get_data_table(tableName=table_name)
         self.assertIsInstance(table, DataTableRows)
         self.assertTrue(hasattr(table[0], "_datascribe_user"))
         self.assertTrue(hasattr(table[0], "_datascribe_insert_time"))
@@ -138,12 +138,11 @@ class TestDataScribeClient(unittest.TestCase):
     def test_get_data_table_rows(self) -> None:
         """Test retrieving rows from a data table."""
         tables = self.client.get_data_tables_for_user()
-        self.assertIsInstance(tables, DataTables)
-        table_name = getattr(tables[-2], "table_name", None)  # FIXME
-        columns = self.client.get_data_table_columns(tableName=table_name)
-        self.assertIsInstance(columns, DataTableColumns)
+        columns = self.client.get_data_table_columns(tableName=self.table_name)
         column_list = [column.column_name for column in columns.columns]
-        rows = self.client.get_data_table_rows(tableName=table_name, columns=column_list)
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=column_list)
+        self.assertIsInstance(tables, DataTables)
+        self.assertIsInstance(columns, DataTableColumns)
         self.assertIsInstance(rows, DataTableRows)
         self.assertTrue(all(isinstance(row, DataTableRow) for row in rows))
 
@@ -151,9 +150,8 @@ class TestDataScribeClient(unittest.TestCase):
     def test_get_data_table_columns(self) -> None:
         """Test retrieving columns for a data table."""
         tables = self.client.get_data_tables_for_user()
+        columns = self.client.get_data_table_columns(tableName=self.table_name)
         self.assertIsInstance(tables, DataTables)
-        table_name = getattr(tables[-2], "table_name", None)  # FIXME
-        columns = self.client.get_data_table_columns(tableName=table_name)
         self.assertIsInstance(columns, DataTableColumns)
         self.assertIsInstance(columns, DataTableColumns)
         self.assertTrue(hasattr(columns, "table_name"))
@@ -166,9 +164,8 @@ class TestDataScribeClient(unittest.TestCase):
     def test_get_data_table_metadata(self) -> None:
         """Test retrieving metadata for a data table."""
         tables = self.client.get_data_tables_for_user()
+        metadata = self.client.get_data_table_metadata(tableName=self.table_name)
         self.assertIsInstance(tables, DataTables)
-        table_name = getattr(tables[-2], "table_name", None)  # FIXME
-        metadata = self.client.get_data_table_metadata(tableName=table_name)
         self.assertIsInstance(metadata, DataTableMetadata)
         self.assertIsInstance(metadata, DataTableMetadata)
         self.assertTrue(hasattr(metadata, "table_name"))
@@ -184,9 +181,8 @@ class TestDataScribeClient(unittest.TestCase):
     def test_get_data_table_rows_count(self) -> None:
         """Test retrieving the row count for a data table."""
         tables = self.client.get_data_tables_for_user()
+        counts = self.client.get_data_table_rows_count(tableName=self.table_name)
         self.assertIsInstance(tables, DataTables)
-        table_name = getattr(tables[-2], "table_name", None)  # FIXME
-        counts = self.client.get_data_table_rows_count(tableName=table_name)
         self.assertIsInstance(counts, DataTableRowsCount)
         self.assertTrue(hasattr(counts, "total_rows"))
 
@@ -211,10 +207,8 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_empty_columns_for_rows(self) -> None:
         """Test that requesting rows with empty columns raises an HTTPError."""
-        tables = self.client.get_data_tables_for_user()
-        table_name = getattr(tables[0], "table_name", None)
         with self.assertRaises(HTTPError):
-            self.client.get_data_table_rows(tableName=table_name, columns=[])
+            self.client.get_data_table_rows(tableName=self.table_name, columns=[])
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_context_manager(self) -> None:
@@ -236,37 +230,33 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_dict(self) -> None:
         """Test filtering rows using a filter as a dict."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = {"column": column_name, "operator": "is not null", "value": None}
-        rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+        filters = {"column": self.column_name, "operator": "is not null", "value": None}
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
         self.assertIsInstance(rows, DataTableRows)
         self.assertGreaterEqual(len(rows), 0)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_single_filter_object(self) -> None:
         """Test filtering rows using a single Filter object."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).is_not_null()
-        rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+        filters = Filter(self.column_name).is_not_null()
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
         self.assertIsInstance(rows, DataTableRows)
         self.assertGreaterEqual(len(rows), 0)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_list_of_filters(self) -> None:
         """Test filtering rows using a list of Filter objects (AND logic)."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = [Filter(column_name).is_not_null()]
-        rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+        filters = [Filter(self.column_name).is_not_null()]
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
         self.assertIsInstance(rows, DataTableRows)
         self.assertGreaterEqual(len(rows), 0)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_in_operator(self) -> None:
         """Test filtering rows using the 'in' operator."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).in_([column_name, "test", "foo", "bar"])
+        filters = Filter(self.column_name).in_([self.column_name, "test", "foo", "bar"])
         try:
-            rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+            rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
             self.assertIsInstance(rows, DataTableRows)
         except HTTPError:
             pass  # Acceptable if no matching rows or unsupported type
@@ -274,10 +264,9 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_like_operator(self) -> None:
         """Test filtering rows using the 'like' operator."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).like("%a%")
+        filters = Filter(self.column_name).like("%a%")
         try:
-            rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+            rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
             self.assertIsInstance(rows, DataTableRows)
         except HTTPError:
             pass  # Acceptable if no matching rows or unsupported type
@@ -285,17 +274,15 @@ class TestDataScribeClient(unittest.TestCase):
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_is_null_operator(self) -> None:
         """Test filtering rows using the 'is null' operator."""
-        table_name, column_name = self._get_valid_table_and_column()
-        filters = Filter(column_name).is_null()
-        rows = self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=filters)
+        filters = Filter(self.column_name).is_null()
+        rows = self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=filters)
         self.assertIsInstance(rows, DataTableRows)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_filtering_with_invalid_type_raises(self) -> None:
         """Test that passing an invalid filter type raises TypeError."""
-        table_name, column_name = self._get_valid_table_and_column()
         with self.assertRaises(TypeError):
-            self.client.get_data_table_rows(tableName=table_name, columns=[column_name], filters=123)
+            self.client.get_data_table_rows(tableName=self.table_name, columns=[self.column_name], filters=123)
 
     @unittest.skipUnless(API_TOKEN, "DATASCRIBE_API_TOKEN not set in environment")
     def test_get_material_by_id_mp(self) -> None:
