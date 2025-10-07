@@ -166,3 +166,56 @@ $ datascribe_cli data-table-rows-count [OPTIONS] TABLE_NAME
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--filter TEXT`: Filter expression. Can be used multiple times.
 * `--json`: Output in JSON format.
+
+---
+
+## `datascribe_cli get-material-by-id`
+
+Get material details by ID from selected providers.
+
+**Usage**:
+
+```console
+$ datascribe_cli get-material-by-id [OPTIONS] IDS
+```
+
+**Arguments**:
+
+* `IDS`: Material IDs to retrieve (e.g., mp-190, aflow:xxxx).  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--mp`: Query Materials Project provider.
+* `--aflow`: Query AFLOW provider.
+* `--json`: Output in JSON format.
+
+---
+
+## `datascribe_cli search-materials`
+
+Search for materials using formula, elements, and other filters.
+
+**Usage**:
+
+```console
+$ datascribe_cli search-materials [OPTIONS] FORMULA ELEMENTS EXCLUDE_ELEMENTS SPACEGROUP PROPS TEMPERATURE
+```
+
+**Arguments**:
+
+* `FORMULA`: Chemical formula to search for (e.g., SiO2, Fe2O3).  [required]
+* `ELEMENTS`: Comma-separated list of required elements (e.g., Si,O).  [required]
+* `EXCLUDE_ELEMENTS`: Comma-separated list of elements to exclude (e.g., Pb,Hg).  [required]
+* `SPACEGROUP`: Space group or crystal system to filter by (e.g., cubic, Pnma).  [required]
+* `PROPS`: Comma-separated list of properties to include (e.g., band_gap,formation_energy).  [required]
+* `TEMPERATURE`: Temperature filter (if supported by provider).  [required]
+
+**Options**:
+
+* `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
+* `--mp`: Query Materials Project provider.
+* `--aflow`: Query AFLOW provider.
+* `--page INTEGER`: Page number for paginated results.   [default: 1]
+* `--size INTEGER`: Number of results per page.   [default: 50]
+* `--json`: Output in JSON format.

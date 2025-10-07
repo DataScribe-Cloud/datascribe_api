@@ -23,12 +23,12 @@ class DataScribeClient:
         session (Session): The session used for making HTTP requests with retry logic.
     """
 
-    def __init__(self, api_key: str | None = None, base: str = "https://datascribe.cloud/data/") -> None:
+    def __init__(self, api_key: str | None = None, base: str = "https://datascribe.cloud/") -> None:
         """Initialize the DataScribe API client.
 
         Args:
             api_key (str | None): The API key for authentication. If not provided, it will be read from the environment variable `DATASCRIBE_API_TOKEN`.
-            base (str): The base URL for the DataScribe API. Defaults to "https://datascribe.cloud/data".
+            base (str): The base URL for the DataScribe API. Defaults to "https://datascribe.cloud/".
 
         Raises:
             ValueError: If the API key is not provided and not found in the environment variables.
@@ -69,15 +69,25 @@ class DataScribeClient:
             HTTPError: If the request fails with a status code indicating an error.
         """
         url = f"{self._base}{path}"
-        filters = params.get("filters")
-        if filters is not None:
+
+        if (filters := params.get("filters")) is not None:
             try:
                 serialized = Filter.serialize(filters)
             except Exception as e:
                 raise TypeError(f"Invalid filters: {e}") from e
             params["filters"] = json.dumps(serialized)
+
+        if ids := params.pop("ids", None):
+            params["ids"] = ",".join(ids) if isinstance(ids, list) else ids
+
+        if providers := params.get("providers"):
+            params["providers"] = ",".join(providers) if isinstance(providers, list) else providers
+
+        if elements := params.get("elements"):
+            params["elements"] = ",".join(elements) if isinstance(elements, list) else elements
+
         try:
-            resp = self._session.get(url=url, params=params, timeout=30)
+            resp = self._session.get(url=url, params=params, timeout=60)
             resp.raise_for_status()
         except HTTPError as e:
             error_json = e.response.json()

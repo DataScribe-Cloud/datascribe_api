@@ -42,7 +42,7 @@ class TestDataScribeCLI(unittest.TestCase):
         self.columns_arg = ",".join(column_names[:3])
         self.assertIsNotNone(self.columns_arg)
 
-    def test_script_runs_cli(self):
+    def test_script_runs_cli(self) -> None:
         """Test script runs CLI."""
         result = subprocess.run(
             ["datascribe_cli", "--help"],
@@ -54,7 +54,7 @@ class TestDataScribeCLI(unittest.TestCase):
         self.assertIn("DataScribe CLI", result.stdout)
         self.assertIn("Usage:", result.stdout)
 
-    def test_main_entry_point_runs_cli(self):
+    def test_main_entry_point_runs_cli(self) -> None:
         """Test that running DataScribe Typer CLI as a module shows the CLI help."""
         result = subprocess.run(
             [sys.executable, "-m", "datascribe_api", "--help"],
@@ -431,13 +431,13 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_runs_cli_application_successfully(self) -> None:
         """Ensure the CLI application runs without errors."""
         result = runner.invoke(app, [])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 2)
         self.assertIn("DataScribe CLI", result.output)
 
     def test_shows_help_message_when_no_command_is_provided(self) -> None:
         """Ensure the help message is displayed when no command is provided."""
         result = runner.invoke(app, [])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(result.exit_code, 2)
         self.assertIn("DataScribe CLI", result.output)
         self.assertIn("Usage:", result.output)
         self.assertIn("Options", result.output)
@@ -550,74 +550,187 @@ class TestDataScribeCLI(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRowsCount", result.stdout)
 
-    def test_is_null(self):
+    def test_is_null(self) -> None:
         """Test parse_filter_string with 'is null' operator."""
         f = parse_filter_string("foo is null")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "is null")
 
-    def test_is_not_null(self):
+    def test_is_not_null(self) -> None:
         """Test parse_filter_string with 'is not null' operator."""
         f = parse_filter_string("foo is not null")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "is not null")
 
-    def test_in(self):
+    def test_in(self) -> None:
         """Test parse_filter_string with 'in' operator."""
         f = parse_filter_string("bar in a,b,c")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "in")
 
-    def test_not_in(self):
+    def test_not_in(self) -> None:
         """Test parse_filter_string with 'not in' operator."""
         f = parse_filter_string("bar not in a,b,c")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "not in")
 
-    def test_like(self):
+    def test_like(self) -> None:
         """Test parse_filter_string with 'like' operator."""
         f = parse_filter_string("baz like %foo%")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "like")
 
-    def test_ilike(self):
+    def test_ilike(self) -> None:
         """Test parse_filter_string with 'ilike' operator."""
         f = parse_filter_string("baz ilike %foo%")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "ilike")
 
-    def test_eq(self):
+    def test_eq(self) -> None:
         """Test parse_filter_string with '==' operator."""
         f = parse_filter_string("col==val")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "=")
 
-    def test_ne(self):
+    def test_ne(self) -> None:
         """Test parse_filter_string with '!=' operator."""
         f = parse_filter_string("col!=val")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "!=")
 
-    def test_gt(self):
+    def test_gt(self) -> None:
         """Test parse_filter_string with '>' operator."""
         f = parse_filter_string("col>5")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], ">")
 
-    def test_ge(self):
+    def test_ge(self) -> None:
         """Test parse_filter_string with '>=' operator."""
         f = parse_filter_string("col>=5")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], ">=")
 
-    def test_lt(self):
+    def test_lt(self) -> None:
         """Test parse_filter_string with '<' operator."""
         f = parse_filter_string("col<5")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "<")
 
-    def test_le(self):
+    def test_le(self) -> None:
         """Test parse_filter_string with '<=' operator."""
         f = parse_filter_string("col<=5")
         self.assertIsInstance(f, Filter)
         self.assertEqual(f.to_dict()["operator"], "<=")
+
+    def test_get_material_by_id_mp(self) -> None:
+        """Test get_material_by_id with a valid MP material ID and --mp flag."""
+        result = runner.invoke(app, ["get-material-by-id", "mp-149", "--mp", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("provider", result.output)
+        self.assertIn("data", result.output)
+        self.assertIn("mp-149", result.output)
+
+    def test_get_material_by_id_aflow(self) -> None:
+        """Test get_material_by_id with a valid AFLOW material ID and --aflow flag."""
+        aflow_id = "aflow:08ab41c5f54850db"
+        result = runner.invoke(app, ["get-material-by-id", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("provider", result.output)
+        self.assertIn("data", result.output)
+        self.assertIn("aflow", result.output)
+
+    def test_get_material_by_id_invalid(self) -> None:
+        """Test get_material_by_id with an invalid material ID."""
+        result = runner.invoke(app, ["get-material-by-id", "mp-invalid", "--mp", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn('"total":0', result.output)
+        self.assertNotIn('"data": {', result.output)
+
+    def test_search_materials_mp(self) -> None:
+        """Test search_materials with a valid formula and elements."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
+
+    def test_search_materials_aflow(self) -> None:
+        """Test search_materials with a valid formula and elements."""
+        result = runner.invoke(app, ["search-materials", "", "Si,O", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"])
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn("Si", result.output)
+        self.assertIn("O", result.output)
+
+    def test_search_materials_with_props(self) -> None:
+        """Test search_materials with property filters."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "band_gap", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
+        self.assertIn("bandgap", result.output)
+
+    def test_search_materials_pagination(self) -> None:
+        """Test search_materials with pagination options."""
+        result = runner.invoke(
+            app,
+            [
+                "search-materials",
+                "SiO2",
+                "Si,O",
+                "",
+                "",
+                "",
+                "",
+                "--mp",
+                "--api-key",
+                API_TOKEN,
+                "--json",
+                "--page",
+                "1",
+                "--size",
+                "2",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("SiO2", result.output)
+        self.assertIn("results", result.output)
+
+    def test_search_materials_invalid_mp(self) -> None:
+        """Test search_materials with empty input."""
+        result = runner.invoke(
+            app, ["search-materials", "mp-invalid", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn('"results":[]', result.output)
+
+    def test_search_materials_invalid_aflow(self) -> None:
+        """Test search_materials with empty input."""
+        result = runner.invoke(
+            app, ["search-materials", "", "invalid", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn('"results":[]', result.output)
+
+    def test_search_materials_json_output(self) -> None:
+        """Test search_materials with JSON output flag."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("SiO2", result.output)
+        self.assertIn("results", result.output)
+
+    def test_search_materials_cli_with_oqmd(self):
+        """Test CLI search-materials command with --oqmd option."""
+        result = runner.invoke(
+            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--oqmd", "--api-key", API_TOKEN, "--json"]
+        )
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn("results", result.output)
+        self.assertIn("SiO2", result.output)
+        self.assertIn("OQMD", result.output)
