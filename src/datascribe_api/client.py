@@ -77,14 +77,14 @@ class DataScribeClient:
                 raise TypeError(f"Invalid filters: {e}") from e
             params["filters"] = json.dumps(serialized)
 
-        if material_id := params.get("material_id"):
-            params["id"] = ",".join(material_id) if isinstance(material_id, list) else material_id
+        if ids := params.pop("ids", None):
+            params["ids"] = ",".join(ids) if isinstance(ids, list) else ids
 
         if providers := params.get("providers"):
             params["providers"] = ",".join(providers) if isinstance(providers, list) else providers
 
-        if provider := params.get("provider"):
-            params["provider"] = ",".join(provider) if isinstance(provider, list) else provider
+        if elements := params.get("elements"):
+            params["elements"] = ",".join(elements) if isinstance(elements, list) else elements
 
         try:
             resp = self._session.get(url=url, params=params, timeout=30)

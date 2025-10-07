@@ -208,7 +208,7 @@ def data_table_rows_count(
 
 @app.command("get-material-by-id")
 def get_material_by_id(
-    material_id: Annotated[str, typer.Argument(help="Material ID to retrieve (e.g., mp-190, aflow:xxxx).")],
+    ids: Annotated[str, typer.Argument(help="Material IDs to retrieve (e.g., mp-190, aflow:xxxx).")],
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
@@ -217,8 +217,8 @@ def get_material_by_id(
     """Get material details by ID from selected providers."""
     try:
         with DataScribeClient(api_key=api_key) as client:
-            provider = ",".join([p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag]) or "ALL"
-            material = client.get_material_by_id(material_id=material_id, provider=provider)
+            providers = ",".join([p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag]) or "ALL"
+            material = client.get_material_by_id(ids=ids, providers=providers)
             if json:
                 typer.echo(material.model_dump_json())
             else:

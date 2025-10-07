@@ -176,12 +176,12 @@ Get material details by ID from selected providers.
 **Usage**:
 
 ```console
-$ datascribe_cli get-material-by-id [OPTIONS] MATERIAL_ID
+$ datascribe_cli get-material-by-id [OPTIONS] IDS
 ```
 
 **Arguments**:
 
-* `MATERIAL_ID`: Material ID to retrieve (e.g., mp-190, aflow:xxxx).  [required]
+* `IDS`: Material IDs to retrieve (e.g., mp-190, aflow:xxxx).  [required]
 
 **Options**:
 

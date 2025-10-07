@@ -21,10 +21,6 @@ ROUTES = {
     "get_data_table_columns": ("/data/data-table-columns", DataTableColumns, ["tableName"]),
     "get_data_table_metadata": ("/data/data-table-metadata", DataTableMetadata, ["tableName"]),
     "get_data_table_rows_count": ("/data/data-table-rows-count", DataTableRowsCount, ["tableName"]),
-    "get_material_by_id": ("/materials", MaterialByIdResults, ["material_id"]),
-    "search_materials": (
-        "/materials/search",
-        MaterialSearchResults,
-        ["formula", "elements", "exclude_elements", "spacegroup", "props", "temperature"],
-    ),
+    "get_material_by_id": ("/materials", MaterialByIdResults, ["ids"]),
+    "search_materials": ("/materials/search", MaterialSearchResults, []),
 }

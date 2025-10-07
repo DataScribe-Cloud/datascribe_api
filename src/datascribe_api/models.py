@@ -238,10 +238,12 @@ class MaterialByIdResult(BaseModel):
 
     Attributes:
         provider (str): The name of the data provider (e.g., 'materials_project', 'aflow').
+        id (str): The unique identifier of the material.
         data (dict[str, Any]): The raw material document returned by the provider.
     """
 
     provider: str
+    id: str
     data: MaterialData
 
 

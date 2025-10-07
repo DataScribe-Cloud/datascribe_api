@@ -31,16 +31,16 @@ class DataScribeClient:
     def get_data_table_rows_count(
         self, tableName: str, filters: dict[str, Any] | Filter | list[Filter] | None = None
     ) -> DataTableRowsCount: ...
-    def get_material_by_id(self, material_id: str, provider: list[str] | str) -> MaterialByIdResults: ...
+    def get_material_by_id(self, ids: str, providers: list[str] | str) -> MaterialByIdResults: ...
     def search_materials(
         self,
-        formula: str,
-        elements: list[str] | str,
-        exclude_elements: list[str] | str,
-        spacegroup: str,
-        props: list[str] | str,
-        temperature: float | str,
-        providers: list[str] | str,
+        formula: str | None = None,
+        elements: list[str] | str | None = None,
+        exclude_elements: list[str] | str | None = None,
+        spacegroup: str | None = None,
+        props: list[str] | str | None = None,
+        temperature: float | str | None = None,
+        providers: list[str] | str | None = None,
         page: int = 1,
         size: int = 50,
     ) -> MaterialSearchResults: ...

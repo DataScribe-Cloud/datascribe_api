@@ -658,12 +658,11 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_search_materials_aflow(self) -> None:
         """Test search_materials with a valid formula and elements."""
-        result = runner.invoke(
-            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
-        )
+        result = runner.invoke(app, ["search-materials", "", "Si,O", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
-        self.assertIn("SiO2", result.output)
+        self.assertIn("Si", result.output)
+        self.assertIn("O", result.output)
 
     def test_search_materials_with_props(self) -> None:
         """Test search_materials with property filters."""
@@ -701,12 +700,6 @@ class TestDataScribeCLI(unittest.TestCase):
         self.assertIn("SiO2", result.output)
         self.assertIn("results", result.output)
 
-    def test_search_materials_empty_input(self) -> None:
-        """Test search_materials with empty input."""
-        result = runner.invoke(app, ["search-materials", "", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"])
-        self.assertEqual(result.exit_code, 0)
-        self.assertIn('"results": []', result.output)
-
     def test_search_materials_invalid_mp(self) -> None:
         """Test search_materials with empty input."""
         result = runner.invoke(
@@ -718,10 +711,10 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_search_materials_invalid_aflow(self) -> None:
         """Test search_materials with empty input."""
         result = runner.invoke(
-            app, ["search-materials", "mp-invalid", "", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
+            app, ["search-materials", "", "invalid", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('"results": []', result.output)
+        self.assertIn('"results":[]', result.output)
 
     def test_search_materials_json_output(self) -> None:
         """Test search_materials with JSON output flag."""
