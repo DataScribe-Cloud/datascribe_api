@@ -240,6 +240,7 @@ def search_materials(
     api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
+    oqmd: Annotated[bool, typer.Option("--oqmd", help="Query OQMD provider.")] = False,
     page: Annotated[int, typer.Option(help="Page number for paginated results. ")] = 1,
     size: Annotated[int, typer.Option(help="Number of results per page. ")] = 50,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
@@ -247,7 +248,7 @@ def search_materials(
     """Search for materials using formula, elements, and other filters."""
     try:
         with DataScribeClient(api_key=api_key) as client:
-            providers = [p for p, flag in (("MP", mp), ("AFLOW", aflow)) if flag] or "ALL"
+            providers = [p for p, flag in (("MP", mp), ("AFLOW", aflow), ("OQMD", oqmd)) if flag] or "ALL"
             materials = client.search_materials(
                 formula=formula,
                 elements=elements,

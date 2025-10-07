@@ -428,3 +428,14 @@ class TestDataScribeClient(unittest.TestCase):
         self.assertIsInstance(result.results, list)
         self.assertEqual(result.total, 0)
         self.assertEqual(len(result.results), 0)
+
+    def test_search_materials_with_oqmd(self) -> None:
+        """Test searching materials with the OQMD."""
+        result = self.client.search_materials(
+            formula="SiO2",
+            providers="OQMD",
+        )
+        self.assertGreaterEqual(result.total, 1)
+        self.assertIsInstance(result.results, list)
+        self.assertIn(result.results[0].formula, "SiO2")
+        self.assertEqual(result.results[0].provenance[0].provider, "OQMD")
