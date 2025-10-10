@@ -13,6 +13,7 @@ import unittest
 
 from typer.testing import CliRunner
 
+from datascribe_api import DataScribeClient
 from datascribe_api.cli import app, parse_filter_string
 from datascribe_api.filter import Filter
 
@@ -26,21 +27,27 @@ class TestDataScribeCLI(unittest.TestCase):
     """Unit tests for the DataScribe Typer CLI."""
 
     def setUp(self) -> None:
-        """Set up a table_name for use in tests."""
-        result_table = runner.invoke(app, ["data-tables-for-user", "--api-key", API_TOKEN, "--json"])
-        self.assertEqual(result_table.exit_code, 0)
-        json_objects = re.findall(r"\{.*?\}(?=\s*\{|\s*$)", result_table.output, flags=re.DOTALL)
-        parsed_data = [json.loads(obj) for obj in json_objects]
-        self.table_name = parsed_data[-1].get("table_name")  # FIXME
-        self.assertIsNotNone(self.table_name)
+        """Set up a DataScribeClient instance for each test."""
+        self.client = DataScribeClient(api_key=API_TOKEN)
+        self.table_name, self.columns = self._get_valid_table_and_column()
 
-        result_cols = runner.invoke(app, ["data-table-columns", self.table_name, "--api-key", API_TOKEN, "--json"])
-        self.assertEqual(result_cols.exit_code, 0)
-        json_objects_cols = re.findall(r"\{.*?\}(?=\s*\{|\s*$)", result_cols.output, flags=re.DOTALL)
-        parsed_data_cols = json.loads(json_objects_cols[0])
-        column_names = [column.get("column_name") for column in parsed_data_cols.get("columns")]
-        self.columns_arg = ",".join(column_names[:3])
-        self.assertIsNotNone(self.columns_arg)
+    def tearDown(self) -> None:
+        """Clean up the DataScribeClient instance after each test."""
+        self.client.close()
+
+    def _get_valid_table_and_column(self) -> tuple[str | None, str]:
+        """Helper to get a valid table name and a column name for filtering tests.
+
+        Returns:
+            tuple: (table_name, columns)
+
+        Raises:
+            unittest.SkipTest: If no valid table/column is found.
+        """
+        tables = self.client.get_data_tables_for_user()
+        table_name: str | None = getattr(tables[-2], "table_name", None)
+        columns = self.client.get_data_table_columns(tableName=table_name)
+        return table_name, columns.to_list()
 
     def test_script_runs_cli(self) -> None:
         """Test script runs CLI."""
@@ -524,7 +531,7 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 self.table_name,
-                self.columns_arg,
+                ",".join(self.columns),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
@@ -535,7 +542,6 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table_rows_count_with_filter(self) -> None:
         """Test data-table-rows-count with a filter."""
-        col1 = self.columns_arg.split(",")[0]
         result = runner.invoke(
             app,
             [
@@ -544,7 +550,7 @@ class TestDataScribeCLI(unittest.TestCase):
                 "--api-key",
                 API_TOKEN,
                 "--filter",
-                f"{col1} is not null",
+                f"{self.columns[0]} is not null",
             ],
         )
         self.assertEqual(result.exit_code, 0)
