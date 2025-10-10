@@ -1,0 +1,136 @@
+[data-md-color-scheme="custom-light"] {
+    --md-primary-fg-color: #800000;
+    --md-primary-fg-color--light: #a52a2a;
+    --md-accent-fg-color: #a52a2a;
+    --md-accent-fg-color--transparent: rgba(165, 42, 42, 0.1);
+    --md-accent-bg-color: #ffffff;
+    --md-accent-bg-color--light: #f5f5f5;
+    --md-typeset-a-color: #800000;
+}
+
+/* Common elements styling */
+.md-header {
+    color: #fff;
+}
+
+.md-nav__link:hover {
+    color: var(--md-accent-fg-color);
+}
+
+.md-nav__link--active {
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset a {
+    color: var(--md-primary-fg-color);
+}
+
+.md-typeset a:hover {
+    color: var(--md-accent-fg-color);
+}
+
+/* Button styling */
+.md-button {
+    background-color: var(--md-primary-fg-color);
+    color: white !important;
+    border-radius: 4px;
+}
+
+.md-button:hover {
+    background-color: var(--md-primary-fg-color--light);
+}
+
+/* Admonition styling */
+.md-typeset .admonition {
+    border-left: 4px solid var(--md-primary-fg-color);
+}
+
+/* Enhance the hero section */
+.md-typeset h1 {
+    font-weight: 700;
+    color: var(--md-primary-fg-color);
+    margin-bottom: 1rem;
+}
+
+/* Add subtle animation to feature cards */
+.grid.cards>* {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.grid.cards>*:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Make feature icons more prominent */
+.grid.cards .lg {
+    font-size: 2rem !important;
+    color: var(--md-primary-fg-color);
+    margin-bottom: 0.5rem;
+}
+
+.grid.cards .middle {
+    vertical-align: middle;
+}
+
+/* Enhance testimonial cards */
+.grid.cards> :nth-child(1n+5) {
+    border-left: 3px solid var(--md-primary-fg-color);
+    font-style: italic;
+}
+
+/* Custom button styling */
+.md-button {
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+
+/* Better spacing for content */
+.md-typeset .grid {
+    grid-gap: 1.5rem;
+}
+
+/* Add animation to admonitions */
+.md-typeset .admonition {
+    transition: transform 0.2s;
+}
+
+.md-typeset .admonition:hover {
+    transform: translateY(-2px);
+}
+
+/* Improve code blocks */
+.md-typeset code {
+    background-color: rgba(139, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+
+/* Responsive tweaks */
+@media screen and (max-width: 76.1875em) {
+    .md-nav--primary .md-nav__title {
+        background-color: var(--md-primary-fg-color);
+    }
+}
+
+/* Improve navigation tabs */
+.md-tabs__link {
+    opacity: 0.9;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.md-tabs__link:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.md-tabs__link--active {
+    font-weight: bold;
+}
+
+/* Add subtle branding */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.3));
+}

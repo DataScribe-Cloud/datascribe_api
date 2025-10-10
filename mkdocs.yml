@@ -1,0 +1,51 @@
+site_name: datascribe_api
+repo_url: https://github.com/DataScribe-Cloud/datascribe_api/
+repo_name: DataScribe-Cloud/datascribe_api
+
+theme:
+  name: material
+  logo: img/logo-light.ico
+  favicon: img/favicon.ico
+  palette:
+    - scheme: custom-light
+      toggle:
+      primary: custom
+      accent: custom
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.instant
+    - navigation.indexes
+extra_css:
+  - stylesheets/style.css
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_bases: false
+            show_source: false
+            parameter_headings: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_symbol_type_toc: true
+
+nav:
+  - Home: index.md
+  - Overview: overview.md
+  - Installation & Quick Start: installation.md
+  - CLI Usage: cli.md
+  - Models:
+    - models/index.md
+    - models/DataTable.md
+    - models/DataTables.md
+    - models/DataTableColumns.md
+    - models/DataTableMetadata.md
+    - models/DataTableRows.md
+    - models/DataTableRowsCount.md
+    - models/MaterialByIdResults.md
+    - models/MaterialSearchResults.md
+  - Contributing & Support: contributing.md
