@@ -7,11 +7,11 @@ import json
 import os
 from typing import Any
 
-import requests
 from requests import HTTPError
 
 from datascribe_api.filter import Filter
 from datascribe_api.routes import ROUTES
+from datascribe_api.utils import retry_session
 
 
 class DataScribeClient:
@@ -39,7 +39,7 @@ class DataScribeClient:
                 "A DataScribe API key is required. Check https://datascribe.cloud/profile to generate an API key.",
             )
         self._base = base.rstrip("/")
-        self._session = requests.session()
+        self._session = retry_session()
         self._session.headers.update(
             {
                 "Content-Type": "application/json",
@@ -87,7 +87,7 @@ class DataScribeClient:
             params["elements"] = ",".join(elements) if isinstance(elements, list) else elements
 
         try:
-            resp = self._session.get(url=url, params=params, timeout=60)
+            resp = self._session.get(url=url, params=params)
             resp.raise_for_status()
         except HTTPError as e:
             error_json = e.response.json()

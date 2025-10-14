@@ -3,24 +3,36 @@
 This module provides utility functions for DataScribe API interactions.
 """
 
-import backoff
 import requests
 from requests import Session
-from requests.exceptions import RequestException
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 
 def retry_session() -> Session:
-    """Create a requests session with retry logic for handling request exceptions.
+    """Create a requests session with automatic retry logic for transient errors.
 
-    This function uses the `backoff` library to retry requests that fail due to
-    network-related errors, such as connection timeouts or server errors.
+    The session will retry failed requests up to 5 times with exponential backoff (factor=2)
+    for the following HTTP status codes: 429, 502, 503, 504, and for connection errors.
+    Retries are handled using urllib3's Retry and requests' HTTPAdapter.
 
     Returns:
-        Session: A session object that will retry requests on failure.
+        Session: A requests session with retry logic enabled.
     """
+    retry_strategy = Retry(
+        total=5,
+        backoff_factor=2,
+        status_forcelist=[
+            429,
+            502,
+            503,
+            504,
+        ],
+    )
+
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+
     session = requests.Session()
-    backoff.on_exception(
-        backoff.expo,
-        RequestException,
-    )(session.request)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
     return session

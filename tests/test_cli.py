@@ -4,9 +4,7 @@ This module contains unittests for the DataScribe Typer CLI commands.
 It verifies correct behavior for data table retrieval, metadata, columns, rows, and error handling.
 """
 
-import json
 import os
-import re
 import subprocess
 import sys
 import unittest
