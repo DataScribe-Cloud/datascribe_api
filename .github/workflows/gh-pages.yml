@@ -33,4 +33,4 @@ jobs:
         run: uv sync --locked --all-extras
 
       - name: Deploy documentation to GitHub Pages
-        run: mkdocs gh-deploy --force
+        run: uv run mkdocs gh-deploy --force
