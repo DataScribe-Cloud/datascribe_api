@@ -321,7 +321,7 @@ datascribe-api search-materials [OPTIONS]
     :   Comma-separated list of elements
 
 `--providers TEXT`
-    :   Comma-separated list of providers (e.g., materials_project,aflow)
+    :   Comma-separated list of providers (e.g., MP,AFLOW)
 
 `--limit INTEGER`
     :   Maximum number of results (default: 100)
@@ -339,7 +339,7 @@ datascribe-api search-materials --elements Fe,O
 # Search with specific providers
 datascribe-api search-materials \
   --formula "TiO2" \
-  --providers materials_project,aflow
+  --providers MP,AFLOW
 
 # Limit results
 datascribe-api search-materials \
@@ -387,11 +387,11 @@ datascribe-api get-material-by-id mp-149,mp-13,mp-22526
 
 # Specific providers
 datascribe-api get-material-by-id mp-149 \
-  --providers materials_project
+  --providers MP
 
 # JSON output
 datascribe-api get-material-by-id mp-149,mp-13 \
-  --providers materials_project \
+  --providers MP \
   --json
 ```
 

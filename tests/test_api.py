@@ -33,28 +33,20 @@ ADMIN_API_TOKEN: str | None = os.environ.get("DATASCRIBE_ADMIN_API_TOKEN")
 class TestDataScribeClient(unittest.TestCase):
     """Unit tests for the DataScribeClient API."""
 
-    def setUp(self) -> None:
-        """Set up a DataScribeClient instance for each test."""
-        self.client = DataScribeClient(api_key=API_TOKEN)
-        self.table_name, self.column_name = self._get_valid_table_and_column()
-
-    def tearDown(self) -> None:
-        """Clean up the DataScribeClient instance after each test."""
-        self.client.close()
-
-    def _get_valid_table_and_column(self) -> tuple[str | None, str]:
-        """Helper to get a valid table name and a column name for filtering tests.
-
-        Returns:
-            tuple: (table_name, column_name)
-
-        Raises:
-            unittest.SkipTest: If no valid table/column is found.
-        """
-        tables = self.client.get_data_tables_for_user()
+    @classmethod
+    def setUpClass(cls):
+        """Set up resources required for all tests in this class."""
+        cls.client = DataScribeClient(api_key=API_TOKEN)
+        tables = cls.client.get_data_tables_for_user()
         table_name: str | None = getattr(tables[-2], "table_name", None)
-        columns = self.client.get_data_table_columns(tableName=table_name)
-        return table_name, columns.columns[0].column_name
+        columns = cls.client.get_data_table_columns(tableName=table_name)
+        cls.table_name = table_name
+        cls.column_name = columns.columns[0].column_name
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up resources initialized for all tests in this class."""
+        cls.client.close()
 
     def test_retry_session_returns_session_instance(self) -> None:
         """Ensure retry_session returns a valid Session instance."""

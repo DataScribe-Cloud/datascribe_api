@@ -26,28 +26,20 @@ runner = CliRunner()
 class TestDataScribeCLI(unittest.TestCase):
     """Unit tests for the DataScribe Typer CLI."""
 
-    def setUp(self) -> None:
-        """Set up a DataScribeClient instance for each test."""
-        self.client = DataScribeClient(api_key=API_TOKEN)
-        self.table_name, self.columns = self._get_valid_table_and_column()
-
-    def tearDown(self) -> None:
-        """Clean up the DataScribeClient instance after each test."""
-        self.client.close()
-
-    def _get_valid_table_and_column(self) -> tuple[str | None, str]:
-        """Helper to get a valid table name and a column name for filtering tests.
-
-        Returns:
-            tuple: (table_name, columns)
-
-        Raises:
-            unittest.SkipTest: If no valid table/column is found.
-        """
-        tables = self.client.get_data_tables_for_user()
+    @classmethod
+    def setUpClass(cls):
+        """Set up resources required for all tests in this class."""
+        cls.client = DataScribeClient(api_key=API_TOKEN)
+        tables = cls.client.get_data_tables_for_user()
         table_name: str | None = getattr(tables[-2], "table_name", None)
-        columns = self.client.get_data_table_columns(tableName=table_name)
-        return table_name, columns.to_list()
+        columns = cls.client.get_data_table_columns(tableName=table_name)
+        cls.table_name = table_name
+        cls.columns = columns.to_list()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up resources initialized for all tests in this class."""
+        cls.client.close()
 
     def test_script_runs_cli(self) -> None:
         """Test script runs CLI."""
