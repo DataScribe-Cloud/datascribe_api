@@ -51,7 +51,7 @@ class DataScribeClient:
         """Context manager entry method for the DataScribeClient."""
         return self
 
-    def __exit__(self, *args) -> None:
+    def __exit__(self, *args: Any) -> None:
         """Context manager exit method for the DataScribeClient. Closes the session."""
         self.close()
 
