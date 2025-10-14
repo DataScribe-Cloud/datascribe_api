@@ -22,6 +22,5 @@ def retry_session() -> Session:
     backoff.on_exception(
         backoff.expo,
         RequestException,
-        max_time=60,
     )(session.request)
     return session
