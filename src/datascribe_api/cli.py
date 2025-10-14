@@ -117,7 +117,7 @@ def data_tables_for_user(
         with DataScribeClient(api_key=api_key) as client:
             for table in client.get_data_tables_for_user():
                 if json:
-                    typer.echo(table.json())
+                    typer.echo(table.model_dump_json())
                 else:
                     pretty_print(table)
     except Exception as e:
