@@ -42,9 +42,9 @@ Query rows from a specific data table.
 
 `tableName` (str) - Name of the table to query
 
-`startingRow` (int, optional) - Starting row index for pagination (default: 0)
+`startingRow` (int, _optional_) - Starting row index for pagination (default: 0)
 
-`numRows` (int, optional) - Number of rows to retrieve (default: 100)
+`numRows` (int, _optional_) - Number of rows to retrieve (default: 100)
 
 **Returns:** `DataTableRows` - Collection of table rows
 
@@ -70,13 +70,13 @@ Query table rows with advanced filtering and column selection.
 
 `tableName` (str) - Name of the table to query
 
-`columns` (list, optional) - List of columns to retrieve
+`columns` (list, _optional_) - List of columns to retrieve
 
-`filters` (Filter, optional) - Filter expression to apply
+`filters` (Filter, _optional_) - Filter expression to apply
 
-`startingRow` (int, optional) - Starting row index (default: 0)
+`startingRow` (int, _optional_) - Starting row index (default: 0)
 
-`numRows` (int, optional) - Number of rows to retrieve (default: 100)
+`numRows` (int, _optional_) - Number of rows to retrieve (default: 100)
 
 **Returns:** `DataTableRows` - Filtered collection of table rows
 
@@ -156,7 +156,7 @@ Get the total number of rows in a data table.
 
 `tableName` (str) - Name of the table
 
-`filters` (Filter, optional) - Filter expression to apply
+`filters` (Filter, _optional_) - Filter expression to apply
 
 **Returns:** `DataTableRowsCount` - Row count information
 
@@ -184,15 +184,24 @@ Search for materials across multiple data providers.
 
 **Parameters:**
 
-`formula` (str, optional) - Chemical formula to search for
+`formula` (str, _optional_) - Chemical formula to search for
 
-`elements` (list or str, optional) - Elements to search for
+`elements` (list or str, _optional_) - Elements to include in the search
 
-`providers` (list or str, optional) - Data providers to search (e.g., "MP", "AFLOW")
+`exclude_elements` (list or str, _optional_) - Elements to exclude from the search results
 
-`limit` (int, optional) - Maximum number of results (default: 100)
+`spacegroup` (str, _optional_) - Space group symbol or number to filter materials
 
-`**kwargs` - Additional search parameters
+`props` (list or str, _optional_) - Material properties to filter or retrieve
+
+`temperature` (str, _optional_) - Temperature condition for property-based queries
+
+`providers` (list or str, _optional_) - Data providers to search (e.g., "MP", "AFLOW")
+
+`page` (int, _optional_) - Page number for paginated results (default: 1)
+
+`size` (int, _optional_) - Number of results per page (default: 50)
+
 
 **Returns:** `MaterialSearchResults` - Search results with material summaries
 
@@ -207,7 +216,6 @@ results = client.search_materials(elements=["Fe", "O"])
 results = client.search_materials(
     formula="TiO2",
     providers=["MP", "AFLOW"],
-    limit=50
 )
 
 # Access results
@@ -229,7 +237,7 @@ Retrieve specific materials by their unique identifiers.
 
 `ids` (list or str) - Material ID(s) to retrieve
 
-`providers` (list or str, optional) - Data providers to query
+`providers` (list or str, _optional_) - Data providers to query
 
 **Returns:** `MaterialByIdResults` - Material data from providers
 

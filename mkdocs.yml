@@ -62,7 +62,7 @@ nav:
     - installation/index.md
     - installation/api.md
     - installation/cli.md
-  - API Endpoints Reference: endpoints.md
+  - API Endpoints: endpoints.md
   - CLI Usage: cli.md
   - Models:
     - models/index.md

@@ -20,7 +20,7 @@ def retry_session() -> Session:
         Session: A requests session with retry logic enabled.
     """
     retry_strategy = Retry(
-        total=5,
+        total=3,
         backoff_factor=2,
         status_forcelist=[
             429,

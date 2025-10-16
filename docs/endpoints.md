@@ -1,5 +1,5 @@
 ---
-title: "API Endpoints Reference"
+title: "API Endpoints"
 hide:
   - navigation
   - toc
