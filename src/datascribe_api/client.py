@@ -87,7 +87,7 @@ class DataScribeClient:
             params["elements"] = ",".join(elements) if isinstance(elements, list) else elements
 
         try:
-            resp = self._session.get(url=url, params=params, timeout=180)
+            resp = self._session.get(url=url, params=params, timeout=600)
             resp.raise_for_status()
         except HTTPError as e:
             error_json = e.response.json()
