@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div align="center">
 
 # DataScribe API Client
 
@@ -13,7 +13,8 @@
 
 <p>
   <a href="https://github.com/DataScribe-Cloud/datascribe_api/issues/new?labels=bug">Report a Bug</a> |
-  <a href="https://github.com/DataScribe-Cloud/datascribe_api/issues/new?labels=enhancement">Request a Feature</a>
+  <a href="https://github.com/DataScribe-Cloud/datascribe_api/issues/new?labels=enhancement">Request a Feature</a> |
+<a href="https://datascribe-cloud.github.io/datascribe_api/">Documentation</a>
 </p>
 
 </div>
