@@ -24,7 +24,7 @@ $ datascribe_cli [OPTIONS] COMMAND [ARGS]...
 * `data-table-rows-count`: Retrieve and display the number of rows in a specified data table.
 * `get-material-by-id`: Get material details by ID from selected providers.
 * `search-materials`: Search for materials using formula, elements, and other filters.
-*
+
 ---
 
 ## `datascribe_cli data-tables`
