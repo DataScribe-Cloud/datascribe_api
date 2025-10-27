@@ -270,13 +270,13 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -302,14 +302,14 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--json",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertNotIn("DataTableRow", result.output)
 
@@ -334,15 +334,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--starting-row",
                 "0",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -353,15 +353,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--starting-row",
                 "-1",
             ],
-        )  # FIXME
+        )
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 400", result.output)
         self.assertIn("startingRow must be a valid non-negative integer", result.output)
@@ -373,15 +373,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "-s",
                 "0",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -392,15 +392,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--num-rows",
                 "10",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -411,35 +411,35 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--num-rows",
                 "-1",
             ],
-        )  # FIXME
+        )
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 400", result.output)
         self.assertIn("numRows must be a valid positive integer", result.output)
 
     def test_data_table_rows_num_rows_short_name(self) -> None:
         """Test retrieving rows from a data table with a specified number of rows using short name."""
-        result = runner.invoke(  # FIXME
+        result = runner.invoke(
             app,
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "-n",
                 "10",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -477,15 +477,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
-                "Node_ID is not null",
+                f"{self.columns[0]} is not null",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -496,17 +496,17 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
-                "Node_ID is not null",
+                f"{self.columns[0]} is not null",
                 "--filter",
-                "NodeCoord_0 is not null",
+                f"{self.columns[1]} is not null",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRow", result.output)
 
@@ -517,15 +517,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
-                "Node_ID in foo,bar,baz",
+                f"{self.columns[0]} in foo,bar,baz",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
 
     def test_data_table_rows_with_like_filter(self) -> None:
@@ -535,15 +535,15 @@ class TestDataScribeCLI(unittest.TestCase):
             [
                 "data-table-rows",
                 "-t",
-                "nimplex_composition_space",
+                self.table_name,
                 "-c",
-                "Node_ID,NodeCoord_0,NodeCoord_1",
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
-                "Node_ID like %a%",
+                f"{self.columns[0]} like %a%",
             ],
-        )  # FIXME
+        )
         self.assertEqual(result.exit_code, 0)
 
     def test_data_table_rows_with_invalid_filter(self) -> None:
@@ -555,7 +555,7 @@ class TestDataScribeCLI(unittest.TestCase):
                 "-t",
                 self.table_name,
                 "-c",
-                ",".join(self.columns),
+                ",".join(map(str, self.columns[:3])),
                 "--api-key",
                 API_TOKEN,
                 "--filter",
