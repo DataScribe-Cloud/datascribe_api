@@ -21,7 +21,7 @@ export DATASCRIBE_API_TOKEN="your_api_key"
 Alternatively, pass it with every command using `--api-key` (**not recommended!**):
 
 ```bash
-datascribe-api data-tables-for-user --api-key "your_api_key"
+datascribe_cli data-tables-for-user --api-key "your_api_key"
 ```
 
 ## Global Options
@@ -39,7 +39,7 @@ Most commands support these options:
 List all available data tables (requires admin privileges).
 
 ```bash title="Usage"
-datascribe-api data-tables [OPTIONS]
+datascribe_cli data-tables [OPTIONS]
 ```
 
 **Options:**
@@ -52,13 +52,13 @@ datascribe-api data-tables [OPTIONS]
 
 ```bash title="Examples"
 # Pretty-printed output
-datascribe-api data-tables
+datascribe_cli data-tables
 
 # JSON output
-datascribe-api data-tables --json
+datascribe_cli data-tables --json
 
 # With explicit API key
-datascribe-api data-tables --api-key "your_key"
+datascribe_cli data-tables --api-key "your_key"
 ```
 
 ---
@@ -68,7 +68,7 @@ datascribe-api data-tables --api-key "your_key"
 List all data tables owned by your user account.
 
 ```bash title="Usage"
-datascribe-api data-tables-for-user [OPTIONS]
+datascribe_cli data-tables-for-user [OPTIONS]
 ```
 
 **Options:**
@@ -81,10 +81,10 @@ datascribe-api data-tables-for-user [OPTIONS]
 
 ```bash title="Examples"
 # List your tables
-datascribe-api data-tables-for-user
+datascribe_cli data-tables-for-user
 
 # JSON output
-datascribe-api data-tables-for-user --json > my_tables.json
+datascribe_cli data-tables-for-user --json > my_tables.json
 ```
 
 ---
@@ -94,15 +94,13 @@ datascribe-api data-tables-for-user --json > my_tables.json
 Retrieve rows from a specific data table.
 
 ```bash title="Usage"
-datascribe-api data-table TABLE_NAME [OPTIONS]
+datascribe_cli data-table [OPTIONS]
 ```
 
-**Arguments:**
-
-`TABLE_NAME`
-    :   Name of the data table (required)
-
 **Options:**
+
+`--table-name, -t TEXT`
+    :   Name of the data table  [required]
 
 `--api-key TEXT`
     :   Your DataScribe API key
@@ -118,16 +116,16 @@ datascribe-api data-table TABLE_NAME [OPTIONS]
 
 ```bash title="Examples"
 # Get first 100 rows
-datascribe-api data-table my_experiments
+datascribe_cli data-table --table-name my_experiments
 
 # Get specific range
-datascribe-api data-table my_experiments --starting-row 1000 --num-rows 500
+datascribe_cli data-table --table-name my_experiments --starting-row 1000 --num-rows 500
 
 # Using short flags
-datascribe-api data-table my_experiments -s 0 -n 50
+datascribe_cli data-table -t my_experiments -s 0 -n 50
 
 # JSON output
-datascribe-api data-table my_experiments --json
+datascribe_cli data-table -t my_experiments --json
 ```
 
 ---
@@ -137,15 +135,16 @@ datascribe-api data-table my_experiments --json
 Query table rows with advanced filtering and column selection.
 
 ```bash title="Usage"
-datascribe-api data-table-rows TABLE_NAME [OPTIONS]
+datascribe_cli data-table-rows [OPTIONS]
 ```
 
-**Arguments:**
-
-`TABLE_NAME`
-    :   Name of the data table (required)
-
 **Options:**
+
+`--table-name, -t TEXT`
+    :   Name of the data table  [required]
+
+`--columns, -c TEXT`
+    :   Comma-separated list of columns  [required]
 
 `--api-key TEXT`
     :   Your DataScribe API key
@@ -172,25 +171,25 @@ datascribe-api data-table-rows TABLE_NAME [OPTIONS]
 
 ```bash title="Examples"
 # Single filter
-datascribe-api data-table-rows experiments \
+datascribe_cli data-table-rows --table-name experiments \
   --filter "temperature > 300"
 
 # Multiple filters (AND logic)
-datascribe-api data-table-rows experiments \
+datascribe_cli data-table-rows --table-name experiments \
   --filter "temperature > 300" \
   --filter "pressure < 100" \
   --filter "element in Fe,Ni,Co"
 
 # Pattern matching
-datascribe-api data-table-rows materials \
+datascribe_cli data-table-rows --table-name materials \
   --filter "formula like %O3"
 
 # Null checks
-datascribe-api data-table-rows results \
+datascribe_cli data-table-rows --table-name results \
   --filter "error is null"
 
 # Complex query with pagination
-datascribe-api data-table-rows large_dataset \
+datascribe_cli data-table-rows --table-name large_dataset \
   --filter "year >= 2020" \
   --filter "status == completed" \
   --starting-row 1000 \
@@ -205,15 +204,13 @@ datascribe-api data-table-rows large_dataset \
 Get column definitions and metadata for a data table.
 
 ```bash title="Usage"
-datascribe-api data-table-columns TABLE_NAME [OPTIONS]
+datascribe_cli data-table-columns [OPTIONS]
 ```
 
-**Arguments:**
-
-`TABLE_NAME`
-    :   Name of the data table (required)
-
 **Options:**
+
+`--table-name, -t TEXT`
+    :   Name of the data table  [required]
 
 `--api-key TEXT`
     :   Your DataScribe API key
@@ -223,10 +220,10 @@ datascribe-api data-table-columns TABLE_NAME [OPTIONS]
 
 ```bash title="Examples"
 # Show columns
-datascribe-api data-table-columns my_table
+datascribe_cli data-table-columns --table-name my_table
 
 # JSON output
-datascribe-api data-table-columns my_table --json
+datascribe_cli data-table-columns -t my_table --json
 ```
 
 ---
@@ -236,15 +233,13 @@ datascribe-api data-table-columns my_table --json
 Get complete metadata for a data table, including schema and timestamps.
 
 ```bash title="Usage"
-datascribe-api data-table-metadata TABLE_NAME [OPTIONS]
+datascribe_cli data-table-metadata [OPTIONS]
 ```
 
-**Arguments:**
-
-`TABLE_NAME`
-    :   Name of the data table (required)
-
 **Options:**
+
+`--table-name, -t TEXT`
+    :   Name of the data table  [required]
 
 `--api-key TEXT`
     :   Your DataScribe API key
@@ -254,10 +249,10 @@ datascribe-api data-table-metadata TABLE_NAME [OPTIONS]
 
 ```bash title="Examples"
 # Show metadata
-datascribe-api data-table-metadata my_table
+datascribe_cli data-table-metadata --table-name my_table
 
 # JSON output
-datascribe-api data-table-metadata my_table --json
+datascribe_cli data-table-metadata -t my_table --json
 ```
 
 ---
@@ -267,15 +262,13 @@ datascribe-api data-table-metadata my_table --json
 Get the total number of rows in a data table, optionally with filters.
 
 ```bash title="Usage"
-datascribe-api data-table-rows-count TABLE_NAME [OPTIONS]
+datascribe_cli data-table-rows-count [OPTIONS]
 ```
 
-**Arguments:**
-
-`TABLE_NAME`
-    :   Name of the data table (required)
-
 **Options:**
+
+`--table-name, -t TEXT`
+    :   Name of the data table  [required]
 
 `--api-key TEXT`
     :   Your DataScribe API key
@@ -288,15 +281,15 @@ datascribe-api data-table-rows-count TABLE_NAME [OPTIONS]
 
 ```bash title="Examples"
 # Total row count
-datascribe-api data-table-rows-count my_table
+datascribe_cli data-table-rows-count --table-name my_table
 
 # Count with filters
-datascribe-api data-table-rows-count experiments \
+datascribe_cli data-table-rows-count -t experiments \
   --filter "temperature > 300" \
   --filter "status == completed"
 
 # JSON output
-datascribe-api data-table-rows-count my_table --json
+datascribe_cli data-table-rows-count -t my_table --json
 ```
 
 ---
@@ -306,48 +299,69 @@ datascribe-api data-table-rows-count my_table --json
 Search for materials across multiple data providers.
 
 ```bash title="Usage"
-datascribe-api search-materials [OPTIONS]
+datascribe_cli search-materials [OPTIONS]
 ```
 
 **Options:**
 
+`--formula, -f TEXT`
+    :   Chemical formula to search for (e.g., SiO2, Fe2O3)
+
+`--elements, -e TEXT`
+    :   Comma-separated list of required elements (e.g., Si,O)
+
+`--exclude-elements, -x TEXT`
+    :   Comma-separated list of elements to exclude (e.g., Pb,Hg)
+
+`--spacegroup, -g TEXT`
+    :   Space group or crystal system to filter by (e.g., cubic, Pnma)
+
+`--props, -p TEXT`
+    :   Comma-separated list of properties to include (e.g., band_gap,formation_energy)
+
+`--temperature, -t TEXT`
+    :   Temperature filter (if supported by provider)
+
+`--mp`
+    :   Query Materials Project provider
+
+`--aflow`
+    :   Query AFLOW provider
+
+`--oqmd`
+    :   Query OQMD provider
+
+`--page INTEGER`
+    :   Page number for paginated results   [default: 1]
+
+`--size INTEGER`
+    :   Number of results per page   [default: 50]
+
 `--api-key TEXT`
     :   Your DataScribe API key
-
-`--formula TEXT`
-    :   Chemical formula to search for
-
-`--elements TEXT`
-    :   Comma-separated list of elements
-
-`--providers TEXT`
-    :   Comma-separated list of providers (e.g., MP,AFLOW)
-
-`--limit INTEGER`
-    :   Maximum number of results (default: 100)
 
 `--json`
     :   Output in JSON format
 
 ```bash title="Examples"
 # Search by formula
-datascribe-api search-materials --formula "Fe2O3"
+datascribe_cli search-materials --formula "Fe2O3"
 
 # Search by elements
-datascribe-api search-materials --elements Fe,O
+datascribe_cli search-materials --elements Fe,O
 
 # Search with specific providers
-datascribe-api search-materials \
+datascribe_cli search-materials \
   --formula "TiO2" \
-  --providers MP,AFLOW
+  --mp --aflow
 
 # Limit results
-datascribe-api search-materials \
+datascribe_cli search-materials \
   --elements Fe,Ni \
-  --limit 50
+  --size 50
 
 # JSON output
-datascribe-api search-materials \
+datascribe_cli search-materials \
   --formula "Fe2O3" \
   --json > iron_oxide_materials.json
 ```
@@ -359,39 +373,43 @@ datascribe-api search-materials \
 Retrieve specific materials by their unique identifiers.
 
 ```bash title="Usage"
-datascribe-api get-material-by-id IDS [OPTIONS]
+datascribe_cli get-material-by-id [OPTIONS]
 ```
-
-**Arguments:**
-
-`IDS`
-    :   Comma-separated list of material IDs (required)
 
 **Options:**
 
+`-i, --ids TEXT`
+    :   Material IDs to retrieve (e.g., mp-190, aflow:xxxx)  [required]
+
+`--api-key TEXT`
+    :   Your DataScribe API key  [env var: DATASCRIBE_API_TOKEN; required]
+
+`--mp`
+    :   Query Materials Project provider
+
+`--aflow`
+    :   Query AFLOW provider
+
 `--api-key TEXT`
     :   Your DataScribe API key
-
-`--providers TEXT`
-    :   Comma-separated list of providers
 
 `--json`
     :   Output in JSON format
 
 ```bash title="Examples"
 # Single material
-datascribe-api get-material-by-id mp-149
+datascribe_cli get-material-by-id --ids mp-149
 
 # Multiple materials
-datascribe-api get-material-by-id mp-149,mp-13,mp-22526
+datascribe_cli get-material-by-id --ids mp-149,mp-13,mp-22526
 
 # Specific providers
-datascribe-api get-material-by-id mp-149 \
-  --providers MP
+datascribe_cli get-material-by-id -i mp-149 \
+  --mp
 
 # JSON output
-datascribe-api get-material-by-id mp-149,mp-13 \
-  --providers MP \
+datascribe_cli get-material-by-id -i mp-149,mp-13 \
+  --mp \
   --json
 ```
 
@@ -403,9 +421,9 @@ Every command supports `--help`:
 
 ```bash
 # General help
-datascribe-api --help
+datascribe_cli --help
 
 # Command-specific help
-datascribe-api data-table-rows --help
-datascribe-api search-materials --help
+datascribe_cli data-table-rows --help
+datascribe_cli search-materials --help
 ```

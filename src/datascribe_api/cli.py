@@ -72,7 +72,7 @@ def parse_filter_string(filter_str: str) -> Filter:
 
 @app.command("data-tables")
 def data_tables(
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Retrieve and display all available data tables."""
@@ -89,8 +89,8 @@ def data_tables(
 
 @app.command("data-table")
 def data_table(
-    table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    table_name: Annotated[str, typer.Option("--table-name", "-t", help="Name of the data table.", show_envvar=False)],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     starting_row: Annotated[int, typer.Option("--starting-row", "-s", help="Starting row index for pagination.")] = 0,
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
@@ -109,7 +109,7 @@ def data_table(
 
 @app.command("data-tables-for-user")
 def data_tables_for_user(
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Retrieve and display all data tables that the authenticated user has access to."""
@@ -126,9 +126,9 @@ def data_tables_for_user(
 
 @app.command("data-table-rows")
 def data_table_rows(
-    table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
-    columns: Annotated[str, typer.Argument(help="Comma-separated list of columns.")],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    table_name: Annotated[str, typer.Option("--table-name", "-t", help="Name of the data table.", show_envvar=False)],
+    columns: Annotated[str, typer.Option("--columns", "-c", help="Comma-separated list of columns.", show_envvar=False)],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     starting_row: Annotated[int, typer.Option("--starting-row", "-s", help="Starting row index for pagination.")] = 0,
     num_rows: Annotated[int, typer.Option("--num-rows", "-n", help="Number of rows to retrieve.")] = 100,
     filter_: Annotated[list[str], typer.Option("--filter", help="Filter expression. Can be used multiple times.")] = [],
@@ -152,8 +152,8 @@ def data_table_rows(
 
 @app.command("data-table-columns")
 def data_table_columns(
-    table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    table_name: Annotated[str, typer.Option("--table-name", "-t", help="Name of the data table.", show_envvar=False)],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Retrieve and display the columns of a specified data table."""
@@ -170,8 +170,8 @@ def data_table_columns(
 
 @app.command("data-table-metadata")
 def data_table_metadata(
-    table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    table_name: Annotated[str, typer.Option("--table-name", "-t", help="Name of the data table.", show_envvar=False)],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
     """Retrieve and display metadata for a specified data table."""
@@ -188,8 +188,8 @@ def data_table_metadata(
 
 @app.command("data-table-rows-count")
 def data_table_rows_count(
-    table_name: Annotated[str, typer.Argument(help="Name of the data table.", show_default=False)],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    table_name: Annotated[str, typer.Option("--table-name", "-t", help="Name of the data table.", show_envvar=False)],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     filter_: Annotated[list[str], typer.Option("--filter", help="Filter expression. Can be used multiple times.")] = [],
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
 ) -> None:
@@ -208,8 +208,10 @@ def data_table_rows_count(
 
 @app.command("get-material-by-id")
 def get_material_by_id(
-    ids: Annotated[str, typer.Argument(help="Material IDs to retrieve (e.g., mp-190, aflow:xxxx).")],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+    ids: Annotated[
+        str, typer.Option("--ids", "-i", help="Material IDs to retrieve (e.g., mp-190, aflow:xxxx).", show_envvar=False)
+    ],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
     json: Annotated[bool | None, typer.Option("--json", help="Output in JSON format.")] = None,
@@ -229,15 +231,37 @@ def get_material_by_id(
 
 @app.command("search-materials")
 def search_materials(
-    formula: Annotated[str, typer.Argument(help="Chemical formula to search for (e.g., SiO2, Fe2O3).")],
-    elements: Annotated[str, typer.Argument(help="Comma-separated list of required elements (e.g., Si,O).")],
-    exclude_elements: Annotated[str, typer.Argument(help="Comma-separated list of elements to exclude (e.g., Pb,Hg).")],
-    spacegroup: Annotated[str, typer.Argument(help="Space group or crystal system to filter by (e.g., cubic, Pnma).")],
+    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", help="Your DataScribe API key.")],
+    formula: Annotated[
+        str, typer.Option("--formula", "-f", help="Chemical formula to search for (e.g., SiO2, Fe2O3).", show_envvar=False)
+    ] = "",
+    elements: Annotated[
+        str, typer.Option("--elements", "-e", help="Comma-separated list of required elements (e.g., Si,O).", show_envvar=False)
+    ] = "",
+    exclude_elements: Annotated[
+        str,
+        typer.Option(
+            "--exclude-elements", "-x", help="Comma-separated list of elements to exclude (e.g., Pb,Hg).", show_envvar=False
+        ),
+    ] = "",
+    spacegroup: Annotated[
+        str,
+        typer.Option(
+            "--spacegroup", "-g", help="Space group or crystal system to filter by (e.g., cubic, Pnma).", show_envvar=False
+        ),
+    ] = "",
     props: Annotated[
-        str, typer.Argument(help="Comma-separated list of properties to include (e.g., band_gap,formation_energy).")
-    ],
-    temperature: Annotated[str, typer.Argument(help="Temperature filter (if supported by provider).")],
-    api_key: Annotated[str, typer.Option(envvar="DATASCRIBE_API_TOKEN", show_default=False, help="Your DataScribe API key.")],
+        str,
+        typer.Option(
+            "--props",
+            "-p",
+            help="Comma-separated list of properties to include (e.g., band_gap,formation_energy).",
+            show_envvar=False,
+        ),
+    ] = "",
+    temperature: Annotated[
+        str, typer.Option("--temperature", "-t", help="Temperature filter (if supported by provider).", show_envvar=False)
+    ] = "",
     mp: Annotated[bool, typer.Option("--mp", help="Query Materials Project provider.")] = False,
     aflow: Annotated[bool, typer.Option("--aflow", help="Query AFLOW provider.")] = False,
     oqmd: Annotated[bool, typer.Option("--oqmd", help="Query OQMD provider.")] = False,

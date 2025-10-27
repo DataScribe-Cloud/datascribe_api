@@ -28,19 +28,19 @@ $ datascribe_cli data-tables
 ```
 
 ```bash title="Query a table"
-$ datascribe_cli data-table my_table --num-rows 100
+$ datascribe_cli data-table -t my_table --num-rows 100
 ```
 
 ```bash title="Get table columns"
-$ datascribe_cli data-table-columns my_table
+$ datascribe_cli data-table-columns -t my_table
 ```
 
 ```bash title="Get table metadata"
-$ datascribe_cli data-table-metadata my_table
+$ datascribe_cli data-table-metadata -t my_table
 ```
 
 ```bash title="Get row count"
-$ datascribe_cli data-table-rows-count my_table
+$ datascribe_cli data-table-rows-count -t my_table
 ```
 
 ## Filtering Rows
@@ -48,7 +48,9 @@ $ datascribe_cli data-table-rows-count my_table
 Filter rows using expressions and output as JSON:
 
 ```bash
-$ datascribe_cli data-table-rows my_table col1,col2 \
+$ datascribe_cli data-table-rows \
+    -t my_table \
+    -c col1,col2 \
     --filter "temperature > 300" \
     --filter "element in Fe,Ni,Co" \
     --num-rows 50 \
@@ -63,13 +65,15 @@ Search for materials:
 $ datascribe_cli search-materials \
     --formula "Fe2O3" \
     --elements Fe,O \
-    --providers MP,AFLOW
+    --mp \
+    --aflow
 ```
 
 Get materials by ID
 ```bash
-$ datascribe_cli get-material-by-id mp-149,mp-13 \
-    --providers MP
+$ datascribe_cli get-material-by-id \
+    --ids mp-149,mp-13 \
+    --mp
 ```
 
 ## Help

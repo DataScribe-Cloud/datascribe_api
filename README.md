@@ -156,7 +156,7 @@ datascribe_cli data-tables-for-user
 
 ```sh
 # Retrieve rows from the data table named m3gnet_mpf
-datascribe_cli data-table m3gnet_mpf
+datascribe_cli data-table --table-name m3gnet_mpf
 ```
 
 See the [CLI documentation](README_CLI.md) for more commands and options.

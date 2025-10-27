@@ -100,7 +100,7 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table(self) -> None:
         """Test retrieving a specific data table."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRows", result.output)
         self.assertIn("DataTableRow", result.output)
@@ -112,63 +112,63 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing argument", result.output)
+        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
 
     def test_data_table_nonexistent_table(self) -> None:
         """Test that requesting a nonexistent table returns an error."""
-        result = runner.invoke(app, ["data-table", "__nonexistent_table__", "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table", "-t", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 404", result.output)
         self.assertIn("Table not found", result.output)
 
     def test_data_table_outputs_json_representation_when_json_flag_is_true(self) -> None:
         """Ensure the command outputs JSON representation when the --json flag is set."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertNotIn("DataTableRows", result.output)
         self.assertNotIn("DataTableRow", result.output)
 
     def test_data_table_starting_row(self) -> None:
         """Test retrieving a specific data table with starting row."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--starting-row", "0"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "--starting-row", "0"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRows", result.output)
 
     def test_data_table_starting_row_invalid(self) -> None:
         """Test that an invalid starting row returns an error."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--starting-row", "-1"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "--starting-row", "-1"])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 500", result.output)
         self.assertIn("OFFSET must not be negative", result.output)
 
     def test_data_table_starting_row_short_name(self) -> None:
         """Test retrieving a specific data table with starting row using short name."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "-s", "0"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "-s", "0"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRows", result.output)
 
     def test_data_table_num_rows(self) -> None:
         """Test retrieving a specific data table with a specified number of rows."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--num-rows", "10"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "--num-rows", "10"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRows", result.output)
 
     def test_data_table_num_rows_invalid(self) -> None:
         """Test that an invalid number of rows returns an error."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "--num-rows", "-1"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "--num-rows", "-1"])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 500", result.output)
         self.assertIn("LIMIT must not be negative", result.output)
 
     def test_data_table_num_rows_short_name(self) -> None:
         """Test retrieving a specific data table with a specified number of rows using short name."""
-        result = runner.invoke(app, ["data-table", self.table_name, "--api-key", API_TOKEN, "-n", "10"])
+        result = runner.invoke(app, ["data-table", "-t", self.table_name, "--api-key", API_TOKEN, "-n", "10"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRows", result.output)
 
     def test_data_table_columns(self) -> None:
         """Test retrieving columns for a data table."""
-        result = runner.invoke(app, ["data-table-columns", self.table_name, "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-columns", "-t", self.table_name, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableColumns", result.output)
         self.assertIn("table_name", result.output)
@@ -179,18 +179,18 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-columns"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing argument", result.output)
+        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
 
     def test_data_table_columns_nonexistent_table(self) -> None:
         """Test that requesting columns for a nonexistent table returns an error."""
-        result = runner.invoke(app, ["data-table-columns", "__nonexistent_table__", "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-columns", "-t", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 404", result.output)
         self.assertIn("Table not found", result.output)
 
     def test_data_table_columns_outputs_json_representation_when_json_flag_is_true(self) -> None:
         """Ensure the command outputs JSON representation when the --json flag is set."""
-        result = runner.invoke(app, ["data-table-columns", self.table_name, "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["data-table-columns", "-t", self.table_name, "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertNotIn("DataTableColumns", result.output)
         self.assertIn("table_name", result.output)
@@ -199,7 +199,7 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table_metadata(self) -> None:
         """Test retrieving metadata for a data table."""
-        result = runner.invoke(app, ["data-table-metadata", self.table_name, "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-metadata", "-t", self.table_name, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableMetadata", result.output)
         self.assertIn("table_name", result.output)
@@ -214,18 +214,18 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-metadata"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing argument", result.output)
+        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
 
     def test_data_table_metadata_nonexistent_table(self) -> None:
         """Test that requesting metadata for a nonexistent table returns an error."""
-        result = runner.invoke(app, ["data-table-metadata", "__nonexistent_table__", "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-metadata", "-t", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 404", result.output)
         self.assertIn("Table not found", result.output)
 
     def test_data_table_metadata_outputs_json_representation_when_json_flag_is_true(self) -> None:
         """Ensure the command outputs JSON representation when the --json flag is set."""
-        result = runner.invoke(app, ["data-table-metadata", self.table_name, "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["data-table-metadata", "-t", self.table_name, "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertNotIn("DataTableMetadata", result.output)
         self.assertIn("table_name", result.output)
@@ -238,21 +238,21 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table_rows_count(self) -> None:
         """Test retrieving the row count for a data table."""
-        result = runner.invoke(app, ["data-table-rows-count", self.table_name, "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-rows-count", "-t", self.table_name, "--api-key", API_TOKEN])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("DataTableRowsCount", result.output)
         self.assertIn("total_rows", result.output)
 
     def test_data_table_rows_count_nonexistent_table(self) -> None:
         """Test that requesting row count for a nonexistent table returns an error."""
-        result = runner.invoke(app, ["data-table-rows-count", "__nonexistent_table__", "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-rows-count", "-t", "__nonexistent_table__", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 404", result.output)
         self.assertIn("Table not found", result.output)
 
     def test_data_table_rows_count_outputs_json_representation_when_json_flag_is_true(self) -> None:
         """Ensure the command outputs JSON representation when the --json flag is set."""
-        result = runner.invoke(app, ["data-table-rows-count", self.table_name, "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["data-table-rows-count", "-t", self.table_name, "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertNotIn("DataTableRowsCount", result.output)
         self.assertIn("total_rows", result.output)
@@ -261,26 +261,36 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-rows-count"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing argument", result.output)
+        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
 
     def test_data_table_rows(self) -> None:
         """Test retrieving rows from a data table."""
         result = runner.invoke(
             app,
-            ["data-table-rows", "nimplex_composition_space", "Node_ID,NodeCoord_0,NodeCoord_1", "--api-key", API_TOKEN],
+            [
+                "data-table-rows",
+                "-t",
+                "nimplex_composition_space",
+                "-c",
+                "Node_ID,NodeCoord_0,NodeCoord_1",
+                "--api-key",
+                API_TOKEN,
+            ],
         )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_missing_required_param(self) -> None:
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-rows"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing argument", result.output)
+        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
 
     def test_data_table_rows_nonexistent_table(self) -> None:
         """Test that requesting rows from a nonexistent table returns an error."""
-        result = runner.invoke(app, ["data-table-rows", "__nonexistent_table__", "column1,column2", "--api-key", API_TOKEN])
+        result = runner.invoke(
+            app, ["data-table-rows", "-t", "__nonexistent_table__", "-c", "column1,column2", "--api-key", API_TOKEN]
+        )
         self.assertIn("Error", result.output)
         self.assertIn("HTTP Error 404", result.output)
         self.assertIn("Table not found", result.output)
@@ -291,7 +301,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -303,14 +315,14 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_data_table_rows_empty_columns_for_rows(self) -> None:
         """Test that requesting rows with empty columns returns an error."""
-        result = runner.invoke(app, ["data-table-rows", self.table_name, "", "--api-key", API_TOKEN])
+        result = runner.invoke(app, ["data-table-rows", "-t", self.table_name, "-c", "", "--api-key", API_TOKEN])
         self.assertIn("Error", result.output)
         self.assertIn("Missing required parameter", result.output)
         self.assertIn("columns", result.output)
 
     def test_data_table_rows_empty_columns_for_rows_json(self) -> None:
         """Test that requesting rows with empty columns returns an error."""
-        result = runner.invoke(app, ["data-table-rows", self.table_name, "", "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["data-table-rows", "-t", self.table_name, "-c", "", "--api-key", API_TOKEN, "--json"])
         self.assertIn("Error", result.output)
         self.assertIn("Missing required parameter", result.output)
         self.assertIn("columns", result.output)
@@ -321,7 +333,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -330,7 +344,7 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_starting_row_invalid(self) -> None:
         """Test that an invalid starting row returns an error."""
@@ -338,7 +352,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -356,7 +372,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -365,7 +383,7 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_num_rows(self) -> None:
         """Test retrieving rows from a data table with a specified number of rows."""
@@ -373,7 +391,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -382,7 +402,7 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_num_rows_invalid(self) -> None:
         """Test that an invalid number of rows returns an error."""
@@ -390,7 +410,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -408,7 +430,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -417,7 +441,7 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_help(self) -> None:
         """Test that the CLI help command works."""
@@ -452,16 +476,18 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
                 "--filter",
                 "Node_ID is not null",
             ],
-        )
+        )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_with_multiple_filters(self) -> None:
         """Test data-table-rows with multiple filters (AND logic)."""
@@ -469,7 +495,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
@@ -478,9 +506,9 @@ class TestDataScribeCLI(unittest.TestCase):
                 "--filter",
                 "NodeCoord_0 is not null",
             ],
-        )
+        )  # FIXME
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRow", result.stdout)
+        self.assertIn("DataTableRow", result.output)
 
     def test_data_table_rows_with_in_filter(self) -> None:
         """Test data-table-rows with an IN filter."""
@@ -488,14 +516,16 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
                 "--filter",
                 "Node_ID in foo,bar,baz",
             ],
-        )
+        )  # FIXME
         self.assertEqual(result.exit_code, 0)
 
     def test_data_table_rows_with_like_filter(self) -> None:
@@ -504,14 +534,16 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 "nimplex_composition_space",
+                "-c",
                 "Node_ID,NodeCoord_0,NodeCoord_1",
                 "--api-key",
                 API_TOKEN,
                 "--filter",
                 "Node_ID like %a%",
             ],
-        )
+        )  # FIXME
         self.assertEqual(result.exit_code, 0)
 
     def test_data_table_rows_with_invalid_filter(self) -> None:
@@ -520,7 +552,9 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows",
+                "-t",
                 self.table_name,
+                "-c",
                 ",".join(self.columns),
                 "--api-key",
                 API_TOKEN,
@@ -528,7 +562,7 @@ class TestDataScribeCLI(unittest.TestCase):
                 "invalidfilter",
             ],
         )
-        self.assertIn("Invalid filter syntax", result.stdout)
+        self.assertIn("Invalid filter syntax", result.output)
 
     def test_data_table_rows_count_with_filter(self) -> None:
         """Test data-table-rows-count with a filter."""
@@ -536,6 +570,7 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "data-table-rows-count",
+                "-t",
                 self.table_name,
                 "--api-key",
                 API_TOKEN,
@@ -544,7 +579,7 @@ class TestDataScribeCLI(unittest.TestCase):
             ],
         )
         self.assertEqual(result.exit_code, 0)
-        self.assertIn("DataTableRowsCount", result.stdout)
+        self.assertIn("DataTableRowsCount", result.output)
 
     def test_is_null(self) -> None:
         """Test parse_filter_string with 'is null' operator."""
@@ -620,7 +655,8 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_get_material_by_id_mp(self) -> None:
         """Test get_material_by_id with a valid MP material ID and --mp flag."""
-        result = runner.invoke(app, ["get-material-by-id", "mp-149", "--mp", "--api-key", API_TOKEN, "--json"])
+        mp_id = "mp-149"
+        result = runner.invoke(app, ["get-material-by-id", "-i", mp_id, "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("provider", result.output)
         self.assertIn("data", result.output)
@@ -629,7 +665,7 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_get_material_by_id_aflow(self) -> None:
         """Test get_material_by_id with a valid AFLOW material ID and --aflow flag."""
         aflow_id = "aflow:08ab41c5f54850db"
-        result = runner.invoke(app, ["get-material-by-id", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["get-material-by-id", "-i", aflow_id, "--aflow", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("provider", result.output)
         self.assertIn("data", result.output)
@@ -637,7 +673,8 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_get_material_by_id_invalid(self) -> None:
         """Test get_material_by_id with an invalid material ID."""
-        result = runner.invoke(app, ["get-material-by-id", "mp-invalid", "--mp", "--api-key", API_TOKEN, "--json"])
+        mp_id = "mp-invalid"
+        result = runner.invoke(app, ["get-material-by-id", "-i", mp_id, "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
         self.assertIn('"total":0', result.output)
@@ -645,16 +682,14 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_search_materials_mp(self) -> None:
         """Test search_materials with a valid formula and elements."""
-        result = runner.invoke(
-            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
-        )
+        result = runner.invoke(app, ["search-materials", "-f", "SiO2", "-e", "Si,O", "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
         self.assertIn("SiO2", result.output)
 
     def test_search_materials_aflow(self) -> None:
         """Test search_materials with a valid formula and elements."""
-        result = runner.invoke(app, ["search-materials", "", "Si,O", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["search-materials", "-e", "Si,O", "--aflow", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
         self.assertIn("Si", result.output)
@@ -663,7 +698,7 @@ class TestDataScribeCLI(unittest.TestCase):
     def test_search_materials_with_props(self) -> None:
         """Test search_materials with property filters."""
         result = runner.invoke(
-            app, ["search-materials", "SiO2", "Si,O", "", "", "band_gap", "", "--mp", "--api-key", API_TOKEN, "--json"]
+            app, ["search-materials", "-f", "SiO2", "-e", "Si,O", "-p", "band_gap", "--mp", "--api-key", API_TOKEN, "--json"]
         )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
@@ -676,12 +711,10 @@ class TestDataScribeCLI(unittest.TestCase):
             app,
             [
                 "search-materials",
+                "-f",
                 "SiO2",
+                "-e",
                 "Si,O",
-                "",
-                "",
-                "",
-                "",
                 "--mp",
                 "--api-key",
                 API_TOKEN,
@@ -698,24 +731,31 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_search_materials_invalid_mp(self) -> None:
         """Test search_materials with empty input."""
-        result = runner.invoke(
-            app, ["search-materials", "mp-invalid", "", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
-        )
+        result = runner.invoke(app, ["search-materials", "-f", "mp-invalid", "--mp", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn('"results":[]', result.output)
 
     def test_search_materials_invalid_aflow(self) -> None:
         """Test search_materials with empty input."""
-        result = runner.invoke(
-            app, ["search-materials", "", "invalid", "", "", "", "", "--aflow", "--api-key", API_TOKEN, "--json"]
-        )
+        result = runner.invoke(app, ["search-materials", "-f", "aflow-invalid", "--aflow", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn('"results":[]', result.output)
 
     def test_search_materials_json_output(self) -> None:
         """Test search_materials with JSON output flag."""
         result = runner.invoke(
-            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--mp", "--api-key", API_TOKEN, "--json"]
+            app,
+            [
+                "search-materials",
+                "-f",
+                "SiO2",
+                "-e",
+                "Si,O",
+                "--mp",
+                "--api-key",
+                API_TOKEN,
+                "--json",
+            ],
         )
         self.assertEqual(result.exit_code, 0)
         self.assertIn("SiO2", result.output)
@@ -723,9 +763,7 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_search_materials_cli_with_oqmd(self):
         """Test CLI search-materials command with --oqmd option."""
-        result = runner.invoke(
-            app, ["search-materials", "SiO2", "Si,O", "", "", "", "", "--oqmd", "--api-key", API_TOKEN, "--json"]
-        )
+        result = runner.invoke(app, ["search-materials", "-f", "SiO2", "-e", "Si,O", "--oqmd", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
         self.assertIn("SiO2", result.output)

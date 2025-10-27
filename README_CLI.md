@@ -15,19 +15,21 @@ $ datascribe_cli [OPTIONS] COMMAND [ARGS]...
 
 **Commands**:
 
-* `data-tables`: This command retrieves and displays all data tables available in the DataScribe API.
-* `data-table`: This command retrieves and displays a specific data table from the DataScribe API.
-* `data-tables-for-user`: This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API.
-* `data-table-rows`: This command retrieves and displays rows from a specified data table, allowing you to specify which columns to include.
-* `data-table-columns`: This command retrieves and displays the columns of a specified data table in the DataScribe API.
-* `data-table-metadata`: This command retrieves and displays metadata for a specified data table in the DataScribe API.
-* `data-table-rows-count`: This command retrieves and displays the number of rows in a specified data table in the DataScribe API.
-
+* `data-tables`: Retrieve and display all available data tables.
+* `data-table`: Retrieve and display a specific data table.
+* `data-tables-for-user`: Retrieve and display all data tables that the authenticated user has access to.
+* `data-table-rows`: Retrieve and display rows from a specified data table, allowing you to specify which columns to include.
+* `data-table-columns`: Retrieve and display the columns of a specified data table.
+* `data-table-metadata`: Retrieve and display metadata for a specified data table.
+* `data-table-rows-count`: Retrieve and display the number of rows in a specified data table.
+* `get-material-by-id`: Get material details by ID from selected providers.
+* `search-materials`: Search for materials using formula, elements, and other filters.
+*
 ---
 
 ## `datascribe_cli data-tables`
 
-This command retrieves and displays all data tables available in the DataScribe API.
+Retrieve and display all available data tables.
 
 **Usage**:
 
@@ -44,20 +46,17 @@ $ datascribe_cli data-tables [OPTIONS]
 
 ## `datascribe_cli data-table`
 
-This command retrieves and displays a specific data table from the DataScribe API.
+Retrieve and display a specific data table.
 
 **Usage**:
 
 ```console
-$ datascribe_cli data-table [OPTIONS] TABLE_NAME
+$ datascribe_cli data-table [OPTIONS]
 ```
-
-**Arguments**:
-
-* `TABLE_NAME`: Name of the data table.  [required]
 
 **Options**:
 
+* `-t, --table-name TEXT`: Name of the data table.  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `-s, --starting-row INTEGER`: Starting row index for pagination.  [default: 0]
 * `-n, --num-rows INTEGER`: Number of rows to retrieve.  [default: 100]
@@ -65,7 +64,7 @@ $ datascribe_cli data-table [OPTIONS] TABLE_NAME
 
 ## `datascribe_cli data-tables-for-user`
 
-This command retrieves and displays all data tables that the authenticated user has access to in the DataScribe API.
+Retrieve and display all data tables that the authenticated user has access to.
 
 **Usage**:
 
@@ -82,21 +81,18 @@ $ datascribe_cli data-tables-for-user [OPTIONS]
 
 ## `datascribe_cli data-table-rows`
 
-This command retrieves and displays rows from a specified data table, allowing you to specify which columns to include.
+Retrieve and display rows from a specified data table, allowing you to specify which columns to include. Filtering is supported using --filter.
 
 **Usage**:
 
 ```console
-$ datascribe_cli data-table-rows [OPTIONS] TABLE_NAME COLUMNS
+$ datascribe_cli data-table-rows [OPTIONS]
 ```
-
-**Arguments**:
-
-* `TABLE_NAME`: Name of the data table.  [required]
-* `COLUMNS`: Comma-separated list of columns.  [required]
 
 **Options**:
 
+* `-t, --table-name TEXT`: Name of the data table.  [required]
+* `-c, --columns TEXT`: Comma-separated list of columns.  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `-s, --starting-row INTEGER`: Starting row index for pagination.  [default: 0]
 * `-n, --num-rows INTEGER`: Number of rows to retrieve.  [default: 100]
@@ -107,20 +103,17 @@ $ datascribe_cli data-table-rows [OPTIONS] TABLE_NAME COLUMNS
 
 ## `datascribe_cli data-table-columns`
 
-This command retrieves and displays the columns of a specified data table in the DataScribe API.
+Retrieve and display the columns of a specified data table.
 
 **Usage**:
 
 ```console
-$ datascribe_cli data-table-columns [OPTIONS] TABLE_NAME
+$ datascribe_cli data-table-columns [OPTIONS]
 ```
 
-**Arguments**:
-
-* `TABLE_NAME`: Name of the data table.  [required]
-
 **Options**:
-
+*
+* `-t, --table-name TEXT`: Name of the data table.  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--json`: Output in JSON format.
 
@@ -128,20 +121,17 @@ $ datascribe_cli data-table-columns [OPTIONS] TABLE_NAME
 
 ## `datascribe_cli data-table-metadata`
 
-This command retrieves and displays metadata for a specified data table in the DataScribe API.
+Retrieve and display metadata for a specified data table.
 
 **Usage**:
 
 ```console
-$ datascribe_cli data-table-metadata [OPTIONS] TABLE_NAME
+$ datascribe_cli data-table-metadata [OPTIONS]
 ```
-
-**Arguments**:
-
-* `TABLE_NAME`: Name of the data table.  [required]
 
 **Options**:
 
+* `-t, --table-name TEXT`: Name of the data table.  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--json`: Output in JSON format.
 
@@ -149,20 +139,17 @@ $ datascribe_cli data-table-metadata [OPTIONS] TABLE_NAME
 
 ## `datascribe_cli data-table-rows-count`
 
-This command retrieves and displays the number of rows in a specified data table in the DataScribe API.
+Retrieve and display the number of rows in a specified data table. Filtering is supported using --filter.
 
 **Usage**:
 
 ```console
-$ datascribe_cli data-table-rows-count [OPTIONS] TABLE_NAME
+$ datascribe_cli data-table-rows-count [OPTIONS]
 ```
-
-**Arguments**:
-
-* `TABLE_NAME`: Name of the data table.  [required]
 
 **Options**:
 
+* `-t, --table-name TEXT`: Name of the data table.  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--filter TEXT`: Filter expression. Can be used multiple times.
 * `--json`: Output in JSON format.
@@ -176,15 +163,12 @@ Get material details by ID from selected providers.
 **Usage**:
 
 ```console
-$ datascribe_cli get-material-by-id [OPTIONS] IDS
+$ datascribe_cli get-material-by-id [OPTIONS]
 ```
-
-**Arguments**:
-
-* `IDS`: Material IDs to retrieve (e.g., mp-190, aflow:xxxx).  [required]
 
 **Options**:
 
+* `-i, --ids TEXT`: Material IDs to retrieve (e.g., mp-190, aflow:xxxx).  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--mp`: Query Materials Project provider.
 * `--aflow`: Query AFLOW provider.
@@ -199,23 +183,21 @@ Search for materials using formula, elements, and other filters.
 **Usage**:
 
 ```console
-$ datascribe_cli search-materials [OPTIONS] FORMULA ELEMENTS EXCLUDE_ELEMENTS SPACEGROUP PROPS TEMPERATURE
+$ datascribe_cli search-materials [OPTIONS]
 ```
-
-**Arguments**:
-
-* `FORMULA`: Chemical formula to search for (e.g., SiO2, Fe2O3).  [required]
-* `ELEMENTS`: Comma-separated list of required elements (e.g., Si,O).  [required]
-* `EXCLUDE_ELEMENTS`: Comma-separated list of elements to exclude (e.g., Pb,Hg).  [required]
-* `SPACEGROUP`: Space group or crystal system to filter by (e.g., cubic, Pnma).  [required]
-* `PROPS`: Comma-separated list of properties to include (e.g., band_gap,formation_energy).  [required]
-* `TEMPERATURE`: Temperature filter (if supported by provider).  [required]
 
 **Options**:
 
+* `-f, --formula TEXT`: Chemical formula to search for (e.g., SiO2, Fe2O3).  [required]
+* `-e, --elements TEXT`: Comma-separated list of required elements (e.g., Si,O).  [required]
+* `-x, --exclude-elements TEXT`: Comma-separated list of elements to exclude (e.g., Pb,Hg).  [required]
+* `-g, --spacegroup TEXT`: Space group or crystal system to filter by (e.g., cubic, Pnma).  [required]
+* `-p, --props TEXT`: Comma-separated list of properties to include (e.g., band_gap,formation_energy).  [required]
+* `-t, --temperature TEXT`: Temperature filter (if supported by provider).  [required]
 * `--api-key TEXT`: Your DataScribe API key.  [env var: DATASCRIBE_API_TOKEN; required]
 * `--mp`: Query Materials Project provider.
 * `--aflow`: Query AFLOW provider.
+* `--oqmd`: Query OQMD provider.
 * `--page INTEGER`: Page number for paginated results.   [default: 1]
 * `--size INTEGER`: Number of results per page.   [default: 50]
 * `--json`: Output in JSON format.
