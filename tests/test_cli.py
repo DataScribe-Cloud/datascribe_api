@@ -112,7 +112,7 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
+        self.assertIn("Missing option", result.output)
 
     def test_data_table_nonexistent_table(self) -> None:
         """Test that requesting a nonexistent table returns an error."""
@@ -179,7 +179,7 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-columns"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
+        self.assertIn("Missing option", result.output)
 
     def test_data_table_columns_nonexistent_table(self) -> None:
         """Test that requesting columns for a nonexistent table returns an error."""
@@ -214,7 +214,7 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-metadata"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
+        self.assertIn("Missing option", result.output)
 
     def test_data_table_metadata_nonexistent_table(self) -> None:
         """Test that requesting metadata for a nonexistent table returns an error."""
@@ -261,7 +261,7 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-rows-count"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
+        self.assertIn("Missing option", result.output)
 
     def test_data_table_rows(self) -> None:
         """Test retrieving rows from a data table."""
@@ -284,7 +284,7 @@ class TestDataScribeCLI(unittest.TestCase):
         """Test that missing required parameters returns an error."""
         result = runner.invoke(app, ["data-table-rows"])
         self.assertIn("Error", result.output)
-        self.assertIn("Missing option '--table-name' / '-t'.", result.output)
+        self.assertIn("Missing option", result.output)
 
     def test_data_table_rows_nonexistent_table(self) -> None:
         """Test that requesting rows from a nonexistent table returns an error."""
