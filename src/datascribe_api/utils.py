@@ -12,7 +12,7 @@ from urllib3.util import Retry
 def retry_session() -> Session:
     """Create a requests session with automatic retry logic for transient errors.
 
-    The session will retry failed requests up to 5 times with exponential backoff (factor=2)
+    The session will retry failed requests up to 5 times with exponential backoff (factor=4)
     for the following HTTP status codes: 429, 502, 503, 504, and for connection errors.
     Retries are handled using urllib3's Retry and requests' HTTPAdapter.
 
@@ -20,8 +20,8 @@ def retry_session() -> Session:
         Session: A requests session with retry logic enabled.
     """
     retry_strategy = Retry(
-        total=3,
-        backoff_factor=2,
+        total=5,
+        backoff_factor=4,
         status_forcelist=[
             429,
             502,

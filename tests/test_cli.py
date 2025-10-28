@@ -763,8 +763,8 @@ class TestDataScribeCLI(unittest.TestCase):
 
     def test_search_materials_cli_with_oqmd(self):
         """Test CLI search-materials command with --oqmd option."""
-        result = runner.invoke(app, ["search-materials", "-f", "SiO2", "-e", "Si,O", "--oqmd", "--api-key", API_TOKEN, "--json"])
+        result = runner.invoke(app, ["search-materials", "-f", "Al2O3", "--oqmd", "--api-key", API_TOKEN, "--json"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("results", result.output)
-        self.assertIn("SiO2", result.output)
+        self.assertIn("Al2O3", result.output)
         self.assertIn("OQMD", result.output)
