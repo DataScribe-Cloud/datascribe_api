@@ -41,6 +41,7 @@ build-backend = "uv_build"
 dev = [
     "pip>=25.1.1",
     "prek>=0.2.11",
+    "pytest>=8.4.2",
     "ruff>=0.12.4",
 ]
 
@@ -89,6 +90,7 @@ ignore = [
     "B006",    # Do not use mutable data structures for argument defaults
     "N803",    # Invalid argument name
 ]
+pylint.allow-magic-value-types = ["str", "bytes", "int"]
 pydocstyle.convention = "google"
 
 [tool.ruff.format]
