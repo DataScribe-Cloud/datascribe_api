@@ -662,6 +662,7 @@ class TestDataScribeCLI:
         assert "data" in result.output
         assert "mp-149" in result.output
 
+    @pytest.mark.slow
     def test_get_material_by_id_aflow(self) -> None:
         """Test get_material_by_id with a valid AFLOW material ID and --aflow flag."""
         aflow_id = "aflow:08ab41c5f54850db"
@@ -687,6 +688,7 @@ class TestDataScribeCLI:
         assert "results" in result.output
         assert "SiO2" in result.output
 
+    @pytest.mark.slow
     def test_search_materials_aflow(self) -> None:
         """Test search_materials with a valid formula and elements."""
         result = runner.invoke(app, ["search-materials", "-e", "Si,O", "--aflow", "--api-key", API_TOKEN, "--json"])
@@ -735,6 +737,7 @@ class TestDataScribeCLI:
         assert result.exit_code == 0
         assert '"results":[]' in result.output
 
+    @pytest.mark.slow
     def test_search_materials_invalid_aflow(self) -> None:
         """Test search_materials with empty input."""
         result = runner.invoke(app, ["search-materials", "-f", "aflow-invalid", "--aflow", "--api-key", API_TOKEN, "--json"])
