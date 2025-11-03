@@ -263,6 +263,7 @@ class TestDataScribeClient:
         assert result.results[0].data.material_id == "mp-149"
         assert result.results[0].data.formula_pretty == "Si"
 
+    @pytest.mark.slow
     def test_get_material_by_id_aflow(self) -> None:
         """Test get_material_by_id with a valid AFLOW material ID and provider."""
         result = self.client.get_material_by_id(ids="08ab41c5f54850db", providers="AFLOW")
@@ -271,6 +272,7 @@ class TestDataScribeClient:
         assert result.results[0].provider.lower() == "aflow"
         assert result.results[0].data.auid == "aflow:08ab41c5f54850db"
 
+    @pytest.mark.slow
     def test_get_material_by_id_full_aflow(self) -> None:
         """Test get_material_by_id with a valid full AFLOW material ID and provider."""
         result = self.client.get_material_by_id(ids="aflow:08ab41c5f54850db", providers="AFLOW")
@@ -295,6 +297,7 @@ class TestDataScribeClient:
         assert isinstance(result.results, list)
         assert result.results[0].formula in "SiO2"
 
+    @pytest.mark.slow
     def test_search_materials_basic_aflow(self) -> None:
         """Test search_materials with a valid AFLOW material ID and formula."""
         result = self.client.search_materials(
@@ -306,6 +309,7 @@ class TestDataScribeClient:
         assert "Si" in result.results[0].elements
         assert "O" in result.results[0].elements
 
+    @pytest.mark.slow
     def test_search_materials_basic_two_providers(self) -> None:
         """Test search_materials using two providers."""
         result = self.client.search_materials(
@@ -338,6 +342,7 @@ class TestDataScribeClient:
         assert isinstance(result.results, list)
         assert len(result.results) == 1
 
+    @pytest.mark.slow
     def test_search_materials_returns_correct_number_of_materials_aflow(self) -> None:
         """Test search_materials with pagination options for AFLOW."""
         result = self.client.search_materials(
@@ -348,6 +353,7 @@ class TestDataScribeClient:
         assert isinstance(result.results, list)
         assert len(result.results) >= 1
 
+    @pytest.mark.slow
     def test_search_materials_returns_correct_number_of_materials_two_providers(self) -> None:
         """Test search_materials with pagination options for multiple providers."""
         result = self.client.search_materials(
@@ -365,6 +371,7 @@ class TestDataScribeClient:
         assert result.total == 0
         assert len(result.results) == 0
 
+    @pytest.mark.slow
     def test_search_materials_invalid_aflow(self) -> None:
         """Test search_materials with invalid input for AFLOW."""
         result = self.client.search_materials(
@@ -375,6 +382,7 @@ class TestDataScribeClient:
         assert result.total == 0
         assert len(result.results) == 0
 
+    @pytest.mark.slow
     def test_search_materials_invalid_two_providers(self) -> None:
         """Test search_materials with invalid input for multiple providers."""
         result = self.client.search_materials(
