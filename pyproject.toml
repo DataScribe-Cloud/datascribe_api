@@ -1,6 +1,6 @@
 [project]
 name = "datascribe_api"
-version = "1.0.1"
+version = "1.0.2"
 description = "A Python client for the DataScribe API"
 readme = "README.md"
 authors = [
