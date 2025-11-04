@@ -6,6 +6,4 @@ on:
 jobs:
   call-tests:
     uses: ./.github/workflows/test.yml
-    secrets:
-        DATASCRIBE_API_TOKEN: ${{ secrets.DATASCRIBE_API_TOKEN }}
-        DATASCRIBE_ADMIN_API_TOKEN: ${{ secrets.DATASCRIBE_ADMIN_API_TOKEN }}
+    secrets: inherit

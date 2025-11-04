@@ -10,6 +10,11 @@ on:
     paths-ignore:
       - 'docs/**'
   workflow_call:
+    secrets:
+      DATASCRIBE_API_TOKEN:
+        required: true
+      DATASCRIBE_ADMIN_API_TOKEN:
+        required: false
 
 jobs:
   test:
