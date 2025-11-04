@@ -163,6 +163,27 @@ See the [CLI documentation](README_CLI.md) for more commands and options.
 
 ---
 
+## Citation
+
+If you use `datascribe_api` in your research, please cite the following:
+
+> Sarıtürk, D. (2025). datascribe_api. Zenodo. https://doi.org/10.5281/zenodo.17090844
+
+BibTeX:
+
+```bibtex
+@software{sariturk_2025_17518243,
+  author       = {Sarıtürk, Doğuhan},
+  title        = {datascribe\_api},
+  month        = nov,
+  year         = 2025,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.17090844},
+  url          = {https://doi.org/10.5281/zenodo.17090844},
+}
+```
+
+---
 ## License
 
 This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for details.
