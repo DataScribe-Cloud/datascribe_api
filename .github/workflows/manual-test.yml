@@ -1,0 +1,9 @@
+name: Run Tests (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-tests:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
