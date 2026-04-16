@@ -159,7 +159,7 @@ datascribe_cli data-tables-for-user
 datascribe_cli data-table --table-name m3gnet_mpf
 ```
 
-See the [CLI documentation](README_CLI.md) for more commands and options.
+See the [CLI documentation](https://github.com/DataScribe-Cloud/datascribe_api/blob/main/README_CLI.md) for more commands and options.
 
 ---
 
@@ -186,4 +186,4 @@ BibTeX:
 ---
 ## License
 
-This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the GNU GPLv3 License. See the [LICENSE](https://github.com/DataScribe-Cloud/datascribe_api/blob/main/LICENSE) file for details.
