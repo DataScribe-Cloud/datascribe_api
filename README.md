@@ -1,11 +1,15 @@
 <div align="center">
 
+<img width="207" height="212" alt="datascribe-api-logo" src="https://github.com/user-attachments/assets/792c679a-5c64-4ca0-9692-c0c254d8e189" />
+
 # DataScribe API Client
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/license/gpl-3-0)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Platforms](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey)
+
 [![Tests](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/test.yml)
+[![Lint](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/lint.yml/badge.svg)](https://github.com/DataScribe-Cloud/datascribe_api/actions/workflows/lint.yml)
 
 [![DOI](https://zenodo.org/badge/1024595385.svg)](https://doi.org/10.5281/zenodo.17090844)
 
@@ -165,7 +169,7 @@ See the [CLI documentation](https://github.com/DataScribe-Cloud/datascribe_api/b
 
 ## Citation
 
-If you use `datascribe_api` in your research, please cite the following:
+We are currently preparing a preprint for publication. If you use `datascribe_api` in your research, please cite the following:
 
 > Sarıtürk, D. (2025). datascribe_api. Zenodo. https://doi.org/10.5281/zenodo.17090844
 

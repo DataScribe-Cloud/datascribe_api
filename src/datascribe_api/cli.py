@@ -10,9 +10,7 @@ from rich.panel import Panel
 from datascribe_api import DataScribeClient
 from datascribe_api.filter import Filter
 
-app = typer.Typer(
-    help="DataScribe CLI - Interact with the DataScribe API.", pretty_exceptions_show_locals=False, no_args_is_help=True
-)
+app = typer.Typer(help="DataScribe CLI - Interact with the DataScribe API.", no_args_is_help=True)
 
 
 def handle_error(e: Exception) -> None:
@@ -290,11 +288,6 @@ def search_materials(
                 pretty_print(materials)
     except Exception as e:
         handle_error(e)
-
-
-@app.callback()
-def callback():
-    """Callback for the CLI app. Used for global options or setup if needed."""
 
 
 if __name__ == "__main__":
